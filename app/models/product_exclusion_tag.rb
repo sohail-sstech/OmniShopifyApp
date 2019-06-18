@@ -1,0 +1,2 @@
+class ProductExclusionTag < ApplicationRecord
+end

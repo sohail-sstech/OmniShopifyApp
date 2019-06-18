@@ -1,0 +1,36 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Product Exclusion Tags" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Product Exclusion Tags</h4>
+        </div>
+
+        <%= form_tag('/submit_product_exclusion_tags', method: "post") do %>
+          <%= hidden_field_tag(:shop_id, @shop_id) %>
+          <div class="form-group">
+            <%= label_tag(:exclusion_tags, "Exclusion Tags(Comma separated tags)", :class => "form-label", :for => "exclusion_tags") %>
+            <%= text_field_tag(:exclusion_tags, @no_tags, :class => "form-control" ) %>
+          </div>
+          <hr>
+          <%= submit_tag("Submit", :class => "btn btn-primary") %>
+          <%= link_to 'Back', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>

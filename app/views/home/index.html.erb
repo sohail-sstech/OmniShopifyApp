@@ -1,0 +1,105 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Home" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Webhooks</h4>
+        </div>
+        <div class="list-group">
+          <% if @webhooks.present? %>
+            <% @webhooks.each do |webhook| %>            
+              <div class="list-group-item"><%= webhook.id %> : <%= webhook.topic %> : <%= webhook.address %> </div>
+            <% end %>
+          <% else %>
+            <div class="list-group-item">This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</div>
+          <% end %>
+        </div>
+
+        <div class="box-header">
+          <h4 class="box-title">Menu</h4>
+        </div>
+        <div class="list-group">
+          <a class="list-group-item" href="product_exclusion_tags">Product Exclusion Tags</a>
+          <a class="list-group-item" href="return_reasons">Return Reasons</a>
+          <a class="list-group-item" href="rules">Rules</a>
+        </div>
+        
+        <div class="box-header">
+          <h4 class="box-title">Test</h4>
+        </div>
+        <div class="list-group">
+          <a class="list-group-item" href="home/test">Home->Test</a>
+          <a class="list-group-item" href="api/index">Api->Index</a>
+          <a class="list-group-item" href="api/test">Api->Test</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<%
+=begin
+%>
+<h2>Products</h2>
+
+<ul>
+  <% @products.each do |product| %>
+    <li><%= link_to product.title, "https://#{@shop_session.domain}/admin/products/#{product.id}", target: "_top" %></li>
+  <% end %>
+</ul>
+
+<hr>
+
+<h4>Webhooks</h4>
+
+<% if @webhooks.present? %>
+  <ul>
+    <% @webhooks.each do |webhook| %>
+      <%= webhook.id %>
+      <li><%= webhook.topic %> : <%= webhook.address %> </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</p>
+<% end %>
+
+<hr>
+
+<h4>Menu</h4>
+
+<ul>
+  <li><a href="product_exclusion_tags">Product Exclusion Tags</a></li>
+  <li><a href="return_reasons">Return Reasons</a></li>
+  <li><a href="rules">Rules</a></li>
+</ul>
+
+<hr>
+
+<h4>Test</h4>
+
+<ul>
+
+  <li><a href="home/create_order_webhook">Create Webhook</a></li>
+  <li><a href="home/remove_webhook">Remove Webhook</a></li>
+  <li><a href="home/test">Home->Test</a></li>
+  <li><a href="api/index">Api->Index</a></li>
+  <li><a href="api/test">Api->Test</a></li>
+</ul>
+<%
+=end
+%>

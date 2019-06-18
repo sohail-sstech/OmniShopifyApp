@@ -1,0 +1,28 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Rules" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Rules</h4>
+          <%= link_to 'Create a new rule', {:controller => 'settings', :action => 'select_rule'}, :class => "btn btn-primary" %>
+        </div>
+
+
+        
+      </div>
+    </div>
+
+  </div>
+</div>

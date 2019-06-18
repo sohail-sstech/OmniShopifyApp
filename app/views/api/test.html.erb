@@ -1,0 +1,17 @@
+<h2>Hello, you are on api/test</h2>
+<b><%= @order_no %> and <%= @shop_url %></b> <br/>
+<%
+=begin
+%>
+<b>Shop:</b> <%= @shop %> <br/><br/>
+<b>Products:</b> <%= @products %> <br/><br/>
+<b>Orders:</b> <%= @orders %> <br/><br/>
+<%
+=end
+%>
+<b>Specific Order:</b> <%= @specific_order %> <br/><br/>
+<b>Shops:</b> <%= @shops %> <br/><br/>
+<b>Specific Shops:</b> <%= @specific_shop %> <br/><br/>
+<b>Shopify Shop data:</b><br/>
+<b>Shop Domain:</b> <%= @get_shop_data['shopify_domain'] %> <br/>
+<b>Shop Token:</b> <%= @get_shop_data['shopify_token'] %> <br/><br/>

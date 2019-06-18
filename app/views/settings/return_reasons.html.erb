@@ -1,0 +1,82 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Return Reasons" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+
+<%
+=begin
+%>
+1. <%= @params %><br/>
+2. <%= @selected_reasons %><br/>
+3. <%= @shop_reasons.reason_ids %><br/>
+4. <%= @shop_reasons.reason_ids.include?("1") %><br/>
+<%
+=end
+%>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Return Reasons</h4>
+        </div>
+
+        <%= form_tag({controller: "settings", action: "submit_return_reasons"}, method: "post", class: "shop_reasons") do %>
+        <div class="col-md-12">
+          <div class="form-group row">
+            <% @reasons.each do |row| %>
+              <div class="col-md-4">              
+                  <% checked = false %>
+                  <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
+                  <% checked = true %>
+                  <% end %>
+                  <%= check_box_tag(:'shop_reasons[]', row.id, checked, :class => "form-check-input") %>
+                  <%= label_tag(:shop_reasons, row.reason, :class => "form-label") %>
+              </div>
+            <% end %>
+          </div>
+          <hr>
+          <%= submit_tag("Submit", :class => "btn btn-primary") %>
+          <%= link_to 'Add New Reason', {:controller => 'settings', :action => 'add_new_return_reason'}, :class => "btn btn-primary" %>
+          <%= link_to 'Back', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
+        <% end %>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%
+=begin
+%>
+<h2>Return Reasons</h2>
+
+<%= form_tag({controller: "settings", action: "submit_return_reasons"}, method: "post", class: "shop_reasons") do %>
+  <ul style="list-style:none;">
+    <% @reasons.each do |row| %>
+      <li>
+        <% checked = false %>
+        <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
+        <% checked = true %>
+        <% end %>
+        <%= check_box_tag(:'shop_reasons[]', row.id, checked) %>
+        <%= label_tag(:shop_reasons, row.reason) %>
+      </li>
+    <% end %>
+  </ul>
+  <%= submit_tag("Submit") %>
+  <%= link_to 'Add New Reason', {:controller => 'settings', :action => 'add_new_return_reason'} %>
+<% end %>
+<%
+=end
+%>

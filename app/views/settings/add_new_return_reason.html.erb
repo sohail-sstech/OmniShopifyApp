@@ -1,0 +1,42 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Add Return Reasons" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+<%
+=begin
+%>
+<%= @display %>
+<%
+=end
+%>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Add Return Reasons</h4>
+        </div>
+
+        <%= form_tag("/submit_add_reasons", method: "post") do %>
+          <div class="form-group">
+            <%= label_tag(:reason, "Return Reason", :class => "form-label", :for => "reason") %>
+            <%= text_field_tag(:reason, "", :class => "form-control") %>
+          </div>
+          <hr>
+          <%= submit_tag("Submit", :class => "btn btn-primary") %>
+          <%= link_to 'Back', {:controller => 'settings', :action => 'return_reasons'}, :class => "btn btn-primary" %>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>

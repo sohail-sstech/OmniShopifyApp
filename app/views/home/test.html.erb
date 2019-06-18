@@ -1,0 +1,11 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Home" });
+    });
+  </script>
+<% end %>
+
+<%= params %>
+
+<%= @my_hash %>
