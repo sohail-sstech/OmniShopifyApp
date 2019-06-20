@@ -7,6 +7,13 @@
 <% end %>
 
 <%= @params %>
+<% 
+=begin %>
+<br/>
+<%= @rule_list.to_json %>
+<%
+=end
+%>
 
 <div class="box box-info">
   <div class="box-body">
@@ -16,11 +23,63 @@
 
         <div class="box-header">
           <h4 class="box-title">Rules</h4>
-          <%= link_to 'Create a new rule', {:controller => 'settings', :action => 'select_rule'}, :class => "btn btn-primary" %>
+          <%= link_to raw('<button type="button" class="btn btn-primary">Create a new rule</button>'), {:controller => 'settings', :action => 'select_rule'}, :class => "" %>
         </div>
 
+        <div class="box-body mt-3 pb-3">
+          <table class="table table-striped">
+            <% i = 1 %>
+            <% @rule_list.each do |rule| %>
+              <tr>
+                <td><strong><%= i %>.<%= rule.name %></strong></td>
+                <td>Priority <%= rule.priority %></td>
+                <td>
+                  <% conditions_arr = JSON.parse(rule.conditions) %>
+                  <% j = 0 %>
+                  <% conditions_arr['cond_field'].each do |cond_field_v| %>
+                    <%= @cond_field_harr[conditions_arr['cond_field'][j]] %> <%= conditions_arr['cond_param'][j] %> <% if cond_field_v == 'OC'  %><%= @country_harr[conditions_arr['cond_value'][j]] %><% else %><%= conditions_arr['cond_value'][j] %><% end %><br/>
+                    <% j += 1 %>
+                  <% end %>
+                </td>
+                <td class="text-right">
+                  <%= link_to raw('<button type="button" class="btn btn-primary">Edit Rule</button>'), '#' %>
+                  <%= link_to raw('<button type="button" class="btn btn-primary">Delete Rule</button>'), '#' %>
+                </td>
+              </tr>
+              <% if rule.rule_option_id.nil? %>
+                <tr>
+                  <td class="text-center" colspan="4">
+                    <%= link_to raw('<button type="button" class="btn btn-primary">Add Rule Option</button>'), '#' %>
+                  </td>
+                </tr>
+              <% else %>
+                <tr>
+                  <td>
+                    <% if rule.refund_method == 2 %>
+                      Refund
+                    <% else %>
+                      Store Credit
+                    <% end %>
+                  </td>
+                  <td>Return Days limit <%= rule.return_window %></td>
+                  <td>
+                    <% if rule.return_shipping_fee == '1' %>
+                      Shipping fee will be refunded
+                    <% else %>
+                      Shipping fee will not be refunded
+                    <% end %>                    
+                  </td>
+                  <td class="text-right">
+                    <%= link_to raw('<button type="button" class="btn btn-primary">Edit Option</button>'), '#' %>
+                    <%= link_to raw('<button type="button" class="btn btn-primary">Delete Option</button>'), '#' %>
+                  </td>
+                </tr>
+              <% end %>              
+              <% i += 1 %>
+            <% end %>
+          </table>
+        </div>
 
-        
       </div>
     </div>
 

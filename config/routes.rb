@@ -15,5 +15,10 @@ Rails.application.routes.draw do
   post "submit_add_reasons", :to => 'settings#submit_add_new_return_reason'
   get "rules", :to => 'settings#rules'
   get "select_rule", :to => 'settings#select_rule'
+  get "create_rule/:rule_type", to: 'settings#create_rule' # @rule_type 1 = Country, 2 = Order Value, 3 = Order Discount, 4 = Return Reason
+  post "submit_create_rule/:rule_type", to: 'settings#submit_create_rule'
+  get "add_options_to_rule/:rule_id", to: 'settings#add_options_to_rule'
+  post "submit_add_options_to_rule/:rule_id", to: 'settings#submit_add_options_to_rule'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,0 +1,2 @@
+class RuleOption < ApplicationRecord
+end

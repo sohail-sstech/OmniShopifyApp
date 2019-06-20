@@ -16,7 +16,6 @@
 
             <div class="box-header">
                 <h4 class="box-title">Select Rule</h4>
-                
             </div>
 
             <div class="row">
@@ -26,9 +25,9 @@
                             Country
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Create Rule by Country</h5>
+                            <p class="card-text">Set rules with respect to customer Country.</p>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/1", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -39,9 +38,9 @@
                             Order Value
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Create Rule by Order Value</h5>
+                            <p class="card-text">Set rules with respect to Order Value.</p>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/2", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -56,9 +55,9 @@
                             Order Discount
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Create Rule by Order Discount</h5>
+                            <p class="card-text">Set rules with respect to Order Discount.</p>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/3", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -69,9 +68,9 @@
                             Return Reason
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title">Create Rule by Return Reason</h5>
+                            <p class="card-text">Set rules with respect to Return Reason.</p>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/4", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -80,7 +79,9 @@
             <hr>
             
             <div class="row">
-                <%= link_to 'Back', {:controller => 'settings', :action => 'rules'}, :class => "btn btn-primary" %>
+                <div class="col-md-12">
+                    <%= link_to raw('<button type="button" class="btn btn-primary">Back to Rules</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
+                </div>
             </div>
         </div>
     </div>

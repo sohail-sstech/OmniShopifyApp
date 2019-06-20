@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_14_055011) do
+ActiveRecord::Schema.define(version: 2019_06_19_054019) do
+
+  create_table "countries", force: :cascade do |t|
+    t.string "iso", limit: 2
+    t.string "name", limit: 80
+    t.string "nicename", limit: 80
+    t.string "iso3", limit: 3
+    t.integer "numcode", limit: 6
+    t.integer "phonecode", limit: 5
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "product_exclusion_tags", force: :cascade do |t|
     t.integer "shop_id"
@@ -24,6 +35,28 @@ ActiveRecord::Schema.define(version: 2019_06_14_055011) do
     t.string "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "rule_options", force: :cascade do |t|
+    t.integer "shop_id"
+    t.integer "rule_id"
+    t.integer "refund_method", limit: 3, default: 1
+    t.integer "return_window", limit: 3, default: 0
+    t.integer "return_shipping_fee", limit: 2, default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["rule_id"], name: "index_rule_options_on_rule_id"
+    t.index ["shop_id"], name: "index_rule_options_on_shop_id"
+  end
+
+  create_table "rules", force: :cascade do |t|
+    t.integer "shop_id"
+    t.string "name", limit: 80
+    t.integer "priority", limit: 5, default: 1
+    t.text "conditions"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_rules_on_shop_id"
   end
 
   create_table "shop_reasons", force: :cascade do |t|

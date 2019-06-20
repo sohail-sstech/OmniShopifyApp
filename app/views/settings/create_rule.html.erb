@@ -1,0 +1,187 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Create Rule" });
+    }); 
+  </script>
+  <script type="text/javascript">
+    // Add Conditions
+    function add_condition() {
+      condition_html = $('#main_condition_row').html();
+      //console.log(condition_html);
+      //console.log($('.condition_row').length);
+      if($('.condition_row').length < 6) {
+        $('#conditions_blk').append(condition_html);
+      } else {
+        alert("You can set maximum 5 conditions.");
+      }
+    }
+
+    //Remove Conditions
+    function remove_condition(obj) {
+      if(confirm("Are you sure you want to delete this?")) {
+        $(obj).closest('.condition_row').remove()
+      }
+    }
+
+    //On field change
+    cond_param_compare_html = '';
+    cond_param_boolean_html = '';
+    cond_value_html = '<input type="text" name="cond_value[]" id="cond_value_" value="" class="form-control">';
+    country_html = '';
+    reason_html = '';
+    //set variables
+    //cond_param_compare_html
+    cond_param_compare_html += '<select name="cond_param[]" id="cond_param_" class="form-control">';
+    <% @cond_param_compare_list.each do |cond_param_compare_row| %>
+    cond_param_compare_html += '<option value="<%= cond_param_compare_row[1]  %>"><%= cond_param_compare_row[0]  %></option>';
+    <% end %>
+    cond_param_compare_html += '</select>';
+    //cond_param_boolean_html
+    cond_param_boolean_html += '<select name="cond_param[]" id="cond_param_" class="form-control">';
+    <% @cond_param_boolean_list.each do |cond_param_boolean_row| %>
+    cond_param_boolean_html += '<option value="<%= cond_param_boolean_row[1]  %>"><%= cond_param_boolean_row[0]  %></option>';
+    <% end %>
+    cond_param_boolean_html += '</select>';
+    //country_html
+    country_html += '<select name="cond_value[]" id="cond_value_" class="form-control">';
+    <% @country_list.each do |country_row| %>
+    country_html += '<option value="<%= country_row[1]  %>"><%= country_row[0]  %></option>';
+    <% end %>
+    country_html += '</select>';
+    //reason_html
+    reason_html += '<select name="cond_value[]" id="cond_value_" class="form-control">';
+    <% @reason_list.each do |reason_row| %>
+    reason_html += '<option value="<%= reason_row[1]  %>"><%= reason_row[0]  %></option>';
+    <% end %>
+    reason_html += '</select>';
+    //alert(cond_param_compare_html);
+    function do_on_field_change(obj) {
+      var selected_field_val = $(obj).val();
+      var parent_obj = $(obj).closest('.condition_row');
+      if(selected_field_val == 'OC') {
+        $(parent_obj).find('#cond_param_blk').html(cond_param_boolean_html);
+        $(parent_obj).find('#cond_value_blk').html(country_html);
+      } else if(selected_field_val == 'ORR') {
+        $(parent_obj).find('#cond_param_blk').html(cond_param_boolean_html);
+        $(parent_obj).find('#cond_value_blk').html(reason_html);
+      } else {
+        $(parent_obj).find('#cond_param_blk').html(cond_param_compare_html);
+        $(parent_obj).find('#cond_value_blk').html(cond_value_html);
+      }
+    }
+  </script>
+<% end %>
+
+<%= @params %>
+<%= @selected_cond_filed %><br/>
+
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box-header">
+          <h4 class="box-title">Create Rule</h4>
+        </div>
+
+        <%= form_tag("/submit_create_rule/#{@params[:rule_type]}", method: "post") do %>
+          <div class="form-row">
+              <div class="form-group col-md-10">
+                <%= label_tag(:rule_name, "Rule Name", :class => "form-label", :for => "rule_name") %>
+                <%= text_field_tag(:rule_name, "", :class => "form-control") %>
+              </div>
+              <div class="form-group col-md-2">
+                <%= label_tag(:rule_priority, "Rule Priority", :class => "form-label", :for => "rule_priority") %>
+                <%= select_tag(:rule_priority, options_for_select(@rule_priority_list), :class => 'form-control') %>
+              </div>
+          </div>
+          
+          <hr>          
+          <h5>Conditions</h5>
+
+          <div id="conditions_blk" class="row">
+
+            <div class="form-row col-md-12 condition_row">
+              <div class="form-group col-md-4">
+                <%= label_tag(:cond_field, "Field", :class => "form-label", :for => "cond_field") %>
+                <%= select_tag(:"cond_field[]", options_for_select(@cond_field_list, @selected_cond_filed), :class => 'form-control', :onchange => 'do_on_field_change(this);') %>
+              </div>
+              <div class="form-group col-md-3">
+                <%= label_tag(:cond_param, "Parameter", :class => "form-label", :for => "cond_param") %>
+                <span id="cond_param_blk">
+                  <% if @selected_cond_filed == 'OV' || @selected_cond_filed == 'ODP' %>
+                    <%= select_tag(:"cond_param[]", options_for_select(@cond_param_compare_list), :class => 'form-control') %>
+                  <% else %>
+                    <%= select_tag(:"cond_param[]", options_for_select(@cond_param_boolean_list), :class => 'form-control') %>
+                  <% end %>
+                </span>
+              </div>
+              <div class="form-group col-md-4">
+                <%= label_tag(:cond_value, "Value", :class => "form-label", :for => "cond_value") %>
+                <span id="cond_value_blk">
+                  <% if @selected_cond_filed == 'OC' %>
+                    <%= select_tag(:"cond_value[]", options_for_select(@country_list), :class => 'form-control') %>
+                  <% elsif @selected_cond_filed == 'ORR' %>
+                    <%= select_tag(:"cond_value[]", options_for_select(@reason_list), :class => 'form-control') %>
+                  <% else %>
+                  <%= text_field_tag(:"cond_value[]", "", :class => "form-control") %>
+                  <% end %>
+                </span>
+              </div>
+              <div class="form-group col-md-1">
+                <%= label_tag(:close, " ", :class => "form-label", :for => "close") %>
+                <div class="clearfix"></div>
+                <button type="button" class="close" aria-label="Close" onclick="remove_condition(this);">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
+
+
+
+          </div>
+          <%= button_tag("Add Condition", :class => "btn btn-primary", :onclick => "add_condition();", :type => "button" ) %>
+
+          <hr>
+          <%= submit_tag("Submit", :class => "btn btn-primary") %>
+          <%= link_to raw('<button type="button" class="btn btn-primary">Add Options</button>'), {:controller => 'settings', :action => 'add_options_to_rule', :rule_id => 1}, :class => "" %>
+          <%= link_to raw('<button type="button" class="btn btn-primary">Back to Select Rule</button>'), {:controller => 'settings', :action => 'select_rule'}, :class => "" %>
+        <% end %>
+
+        <% #Start: Main condition row %>
+        <div id="main_condition_row" style="display:none;">
+          <div class="form-row col-md-12 condition_row">
+            <div class="form-group col-md-4">
+              <%= label_tag(:cond_field, "Field", :class => "form-label", :for => "cond_field") %>
+              <%= select_tag(:"cond_field[]", options_for_select(@cond_field_list), :class => 'form-control', :onchange => 'do_on_field_change(this);') %>
+            </div>
+            <div class="form-group col-md-3">
+              <%= label_tag(:cond_param, "Parameter", :class => "form-label", :for => "cond_param") %>
+              <span id="cond_param_blk">
+                <%= select_tag(:"cond_param[]", options_for_select(@cond_param_compare_list), :class => 'form-control') %>
+              </span>
+            </div>
+            <div class="form-group col-md-4">
+              <%= label_tag(:cond_value, "Value", :class => "form-label", :for => "cond_value") %>
+              <span id="cond_value_blk">
+                <%= text_field_tag(:"cond_value[]", "", :class => "form-control") %>
+              </span>
+            </div>
+            <div class="form-group col-md-1">
+              <%= label_tag(:close, " ", :class => "form-label", :for => "close") %>
+              <div class="clearfix"></div>
+              <button type="button" class="close" aria-label="Close" onclick="remove_condition(this);">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <% #End: Main condition row %>
+
+      </div>
+    </div>
+
+  </div>
+</div>

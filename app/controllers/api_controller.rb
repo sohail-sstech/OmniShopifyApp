@@ -41,11 +41,11 @@ class ApiController < ApplicationController
     # @shop = defined?(ShopifyAPI);
     @order_no = params[:order_no]
     @shop_url = params[:shop]
-    Rails.logger.debug("Order No: #{@order_no}")
+    # Rails.logger.debug("Order No: #{@order_no}")
     session = ShopifyAPI::Session.new(domain: "queuefirst.myshopify.com", token: "4a6fdfd48b3d17639994e2f39d9bd8bd", api_version: "2019-04")
     # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
     ShopifyAPI::Base.activate_session(session)
-    
+
 =begin
     @shop = ShopifyAPI::Shop.current
 
@@ -58,6 +58,9 @@ class ApiController < ApplicationController
     # Get all orders
     @orders = ShopifyAPI::Order.find(:all)
 =end
+
+    # Fetch all countries data
+    @all_countries = ShopifyAPI::Country.find(:all, params: {}).to_json
 
     # Specific order from shopify store
     @specific_order = ShopifyAPI::Order.find(:all, params: { order_number: '1038', :limit => 1, :order => "created_at ASC"}).to_json
