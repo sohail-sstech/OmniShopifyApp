@@ -10,14 +10,13 @@
 
 <div class="box box-info">
   <div class="box-body">
-
     <div class="row">
       <div class="col-md-12">
-
-        <div class="box-header">
+        <div class="box-header mt-3">
           <h4 class="box-title">Add Options to Rule</h4>
         </div>
-            <%= form_tag("/submit_add_options_to_rule/1", method: "post") do %>
+        <div class="box-body">
+            <%= form_tag("/submit_add_options_to_rule/#{@parmas[:rule_id]}", method: "post") do %>
                 <div class="form-group">
                     <%= label_tag(:refund_method, "Refund Method: ", :class => "form-label", :for => "method") %>
                     <div class="form-check form-check-inline">
@@ -31,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <%= label_tag(:return_window, "Return Window: ", :class => "form-label", :for => "rule_name") %>
-                    <%= text_field_tag(:return_window, "", :class => "form-control") %>
+                    <%= text_field_tag(:return_window, "", :class => "form-control", :value => 0) %>
                 </div>
                 <div class="form-group">
                     <%= label_tag(:return_shipping_fee, "Shipping Option: ", :class => "form-label", :for => "rule_name") %>
@@ -41,11 +40,11 @@
                     </div>
                 </div>
                 <hr>
-                <%= submit_tag("Submit Options", :class => "btn btn-primary") %>
-                <%= link_to raw('<button type="button" class="btn btn-primary">Back to Rules</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
+                <%= submit_tag("Submit", :class => "btn btn-primary") %>
+                <%= link_to raw('<button type="button" class="btn btn-primary">Cancel</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
             <% end %>
+          </div>
         </div>
     </div>
-
   </div>
 </div>

@@ -1,3 +1,3 @@
 class Rule < ApplicationRecord
-    belongs_to :rule_option
+    validates :name, presence: { message: 'Please enter Rule Name.' }
 end

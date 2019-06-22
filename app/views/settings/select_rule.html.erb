@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12">
 
-            <div class="box-header">
+            <div class="box-header mt-3">
                 <h4 class="box-title">Select Rule</h4>
             </div>
 
@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create Rule by Country</h5>
                             <p class="card-text">Set rules with respect to customer Country.</p>
-                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/1", :class => "" %>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Create</button>'), "create_rule/1", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create Rule by Order Value</h5>
                             <p class="card-text">Set rules with respect to Order Value.</p>
-                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/2", :class => "" %>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Create</button>'), "create_rule/2", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create Rule by Order Discount</h5>
                             <p class="card-text">Set rules with respect to Order Discount.</p>
-                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/3", :class => "" %>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Create</button>'), "create_rule/3", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Create Rule by Return Reason</h5>
                             <p class="card-text">Set rules with respect to Return Reason.</p>
-                            <%= link_to raw('<button type="button" class="btn btn-primary">Go</button>'), "create_rule/4", :class => "" %>
+                            <%= link_to raw('<button type="button" class="btn btn-primary">Create</button>'), "create_rule/4", :class => "" %>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
 
             <hr>
             
-            <div class="row">
+            <div class="row pb-3">
                 <div class="col-md-12">
                     <%= link_to raw('<button type="button" class="btn btn-primary">Back to Rules</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
                 </div>

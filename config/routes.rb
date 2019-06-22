@@ -17,8 +17,14 @@ Rails.application.routes.draw do
   get "select_rule", :to => 'settings#select_rule'
   get "create_rule/:rule_type", to: 'settings#create_rule' # @rule_type 1 = Country, 2 = Order Value, 3 = Order Discount, 4 = Return Reason
   post "submit_create_rule/:rule_type", to: 'settings#submit_create_rule'
+  get "update_rule/:id", to: 'settings#update_rule'
+  post "submit_update_rule/:id", to: 'settings#submit_update_rule'
+  delete "remove_rule/:id", to: "settings#remove_rule"
   get "add_options_to_rule/:rule_id", to: 'settings#add_options_to_rule'
   post "submit_add_options_to_rule/:rule_id", to: 'settings#submit_add_options_to_rule'
+  get "update_options_to_rule/:id", to: 'settings#update_options_to_rule'
+  post "submit_update_options_to_rule/:id", to: 'settings#submit_update_options_to_rule'
+  delete "remove_rule_option/:id", to: "settings#remove_rule_option"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

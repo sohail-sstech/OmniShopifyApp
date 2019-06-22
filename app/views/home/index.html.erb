@@ -14,37 +14,39 @@
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box-header">
+        <div class="box-header mt-3">
           <h4 class="box-title">Webhooks</h4>
         </div>
-        <div class="list-group">
-          <% if @webhooks.present? %>
-            <% @webhooks.each do |webhook| %>            
-              <div class="list-group-item"><%= webhook.id %> : <%= webhook.topic %> : <%= webhook.address %> </div>
+        <div class="box-body">
+          <div class="list-group">
+            <% if @webhooks.present? %>
+              <% @webhooks.each do |webhook| %>            
+                <div class="list-group-item"><%= webhook.id %> : <%= webhook.topic %> : <%= webhook.address %> </div>
+              <% end %>
+            <% else %>
+              <div class="list-group-item">This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</div>
             <% end %>
-          <% else %>
-            <div class="list-group-item">This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</div>
-          <% end %>
-        </div>
+          </div>
 
-        <div class="box-header">
-          <h4 class="box-title">Menu</h4>
-        </div>
-        <div class="list-group">
-          <a class="list-group-item" href="product_exclusion_tags">Product Exclusion Tags</a>
-          <a class="list-group-item" href="return_reasons">Return Reasons</a>
-          <a class="list-group-item" href="rules">Rules</a>
-        </div>
+          <div class="box-header mt-2">
+            <h4 class="box-title">Menu</h4>
+          </div>
+          <div class="list-group">
+            <a class="list-group-item" href="product_exclusion_tags">Product Exclusion Tags</a>
+            <a class="list-group-item" href="return_reasons">Return Reasons</a>
+            <a class="list-group-item" href="rules">Rules</a>
+          </div>
         
-        <div class="box-header">
-          <h4 class="box-title">Test</h4>
-        </div>
-        <div class="list-group">
-          <a class="list-group-item" href="home/test">Home->Test</a>
-          <a class="list-group-item" href="api/index">Api->Index</a>
-          <a class="list-group-item" href="api/test">Api->Test</a>
-        </div>
+          <div class="box-header mt-2">
+            <h4 class="box-title">Test</h4>
+          </div>
+          <div class="list-group">
+            <a class="list-group-item" href="home/test">Home->Test</a>
+            <a class="list-group-item" href="api/index">Api->Index</a>
+            <a class="list-group-item" href="api/test">Api->Test</a>
+          </div>
 
+        </div>
       </div>
     </div>
 

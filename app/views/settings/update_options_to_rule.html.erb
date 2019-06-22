@@ -1,0 +1,62 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Update Options To Rule" });
+    });
+  </script>
+<% end %>
+
+<%= @parmas %>
+
+<div class="box box-info">
+  <div class="box-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box-header mt-3">
+          <h4 class="box-title">Update Options to Rule</h4>
+        </div>
+        <div class="box-body">
+            <%= form_tag("/submit_update_options_to_rule/#{@parmas[:id]}", method: "post") do %>
+                <div class="form-group">
+                    <% if @rule_option_data.refund_method == 1 %>
+                    <% refund_method_check = true %>
+                    <% store_credit_method_check = false %>
+                    <% else %>
+                    <% refund_method_check = false %>
+                    <% store_credit_method_check = true %>
+                    <% end %>
+                    <%= label_tag(:refund_method, "Refund Method: ", :class => "form-label", :for => "method") %>
+                    <div class="form-check form-check-inline">
+                        <%= radio_button_tag(:refund_method, "1", refund_method_check, :class => "form-check-input") %>&nbsp;
+                        <%= label_tag(:store_credit, "Refund", :class => "form-check-label") %>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <%= radio_button_tag(:refund_method, "2", store_credit_method_check, :class => "form-check-input") %>&nbsp;
+                        <%= label_tag(:refund, "Store Credit", :class => "form-check-label") %>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <%= label_tag(:return_window, "Return Window: ", :class => "form-label", :for => "rule_name") %>
+                    <%= text_field_tag(:return_window, "", :class => "form-control", :value => @rule_option_data.return_window) %>
+                </div>
+                <div class="form-group">
+                    <%= label_tag(:return_shipping_fee, "Shipping Option: ", :class => "form-label", :for => "rule_name") %>
+                    <div class="form-check form-check-inline">
+                        <% if @rule_option_data.return_shipping_fee == 1 %>
+                        <% return_shipping_fee_check = true %>
+                        <% else %>
+                        <% return_shipping_fee_check = false %>
+                        <% end %>
+                        <%= check_box_tag(:return_shipping_fee, 1, return_shipping_fee_check, :class => "form-check-input") %>&nbsp;
+                        <%= label_tag(:store_credit, "Refund Shipping Fee", :class => "form-check-label") %>
+                    </div>
+                </div>
+                <hr>
+                <%= submit_tag("Submit", :class => "btn btn-primary") %>
+                <%= link_to raw('<button type="button" class="btn btn-primary">Cancel</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
+            <% end %>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

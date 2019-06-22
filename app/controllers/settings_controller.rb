@@ -29,9 +29,15 @@ class SettingsController < AuthenticatedController
         product_exclusion_tag = ProductExclusionTag.find_by(shop_id: params[:shop_id])
         if product_exclusion_tag.nil?
             save_product_exclusion_tag = ProductExclusionTag.create(shop_id: params[:shop_id], tag: params[:exclusion_tags])
+            unless save_product_exclusion_tag.valid?
+                @errors_messages = save_product_exclusion_tag.errors[:tag]
+            end
         else
             save_product_exclusion_tag = ProductExclusionTag.find_by(shop_id: params[:shop_id])
             save_product_exclusion_tag.update(tag: params[:exclusion_tags])
+            unless save_product_exclusion_tag.valid?
+                @errors_messages = save_product_exclusion_tag.errors[:tag]
+            end
         end
         # Reset data
         product_exclusion_tag = ProductExclusionTag.find_by(shop_id: params[:shop_id])
@@ -83,10 +89,13 @@ class SettingsController < AuthenticatedController
     def submit_add_new_return_reason
         @params = params
         # @display = "above unless #{@params[:reason]}"
-        unless params[:reason].empty?
+        # unless params[:reason].empty?
             # @display = "in unless #{@params[:reason]}"
             save_return_reason = Reason.create(reason: params[:reason])
-        end
+            unless save_return_reason.valid?
+                @errors_messages = save_return_reason.errors[:reason]
+            end
+        # end
         render "add_new_return_reason"
     end
 
@@ -102,7 +111,7 @@ class SettingsController < AuthenticatedController
         country_data.each do |country|
             @country_harr[country.iso] = country.nicename
         end
-        @rule_list = Rule.select("rules.id as rule_id, rules.name, rules.priority, rules.conditions, rule_options.id as rule_option_id, rule_options.refund_method, rule_options.return_window, rule_options.return_shipping_fee").joins("LEFT JOIN rule_options ON rule_options.rule_id = rules.id").where(shop_id: shop_id).find_all
+        @rule_list = Rule.select("rules.id, rules.id as rule_id, rules.name, rules.priority, rules.conditions, rule_options.id as rule_option_id, rule_options.refund_method, rule_options.return_window, rule_options.return_shipping_fee").joins("LEFT JOIN rule_options ON rule_options.rule_id = rules.id").where(shop_id: shop_id).order("rules.priority ASC").find_all
     end
 
     # select rule type
@@ -209,8 +218,110 @@ class SettingsController < AuthenticatedController
         conditions = {"cond_field" => params[:cond_field], "cond_param" => params[:cond_param], "cond_value" => params[:cond_value]}
         # @conditions_json = conditions.to_json
         save_rule = Rule.create(shop_id: shop_id, name: params[:rule_name], priority: params[:rule_priority], conditions: conditions.to_json)
-        redirect_to '/rules'
+        if save_rule.valid?
+            redirect_to '/rules'
+        else
+            @errors_messages = save_rule.errors[:name]
+            render "create_rule"
+        end
         # render "create_rule"
+    end
+
+    # update rule
+    def update_rule
+        @params = params
+        current_shop_domain = ShopifyAPI::Shop.current.domain
+        shop = Shop.find_by(shopify_domain: current_shop_domain)
+        shop_id = shop.id
+        @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
+        @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
+        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
+        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @selected_cond_filed = 'OV'
+        # @country_list = [['United States', 'US'], ['United Kingdom', 'UK'], ['Australia', 'AU'], ['New Zealand', 'NZ'], ['India', 'IN']];
+        country_data = Country.select("id, iso, nicename").find_all
+        @country_list = Array.new
+        i = 0;
+        country_data.each do |country|
+            @country_list[i] = [country.nicename, country.iso]
+            i += 1;
+        end
+        # @country_list = country_list;
+        @reason_list = [['Size - Too Small', 'Size - Too Small'], ['Size - Too Large', 'Size - Too Large'], ['Style', 'Style'], ['Color', 'Color'], ['Too Expensive', 'Too Expensive']];
+        shop_reason_ids_data = ShopReason.select("id, shop_id, reason_ids").find_by(shop_id: shop_id)
+        unless shop_reason_ids_data.nil?
+            shop_reason_data = Reason.select("id, reason").where(id: JSON.parse(shop_reason_ids_data.reason_ids)).find_all
+        else
+            shop_reason_data = Reason.select("id, reason").find_all
+        end
+        # @shop_reason_ids_data = shop_reason_ids_data
+        # @shop_reason_data = shop_reason_data
+        @reason_list = Array.new
+        i = 0;
+        shop_reason_data.each do |shop_reason|
+            @reason_list[i] = [shop_reason.reason, shop_reason.reason]
+            i += 1;
+        end
+        @rule_data = Rule.find_by(id: params[:id])
+    end
+
+    # submit update rule
+    def submit_update_rule
+        @params = params
+        current_shop_domain = ShopifyAPI::Shop.current.domain
+        shop = Shop.find_by(shopify_domain: current_shop_domain)
+        shop_id = shop.id
+        @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
+        @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
+        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
+        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @selected_cond_filed = 'OV'
+        # @country_list = [['United States', 'US'], ['United Kingdom', 'UK'], ['Australia', 'AU'], ['New Zealand', 'NZ'], ['India', 'IN']];
+        country_data = Country.select("id, iso, nicename").find_all
+        @country_list = Array.new
+        i = 0;
+        country_data.each do |country|
+            @country_list[i] = [country.nicename, country.iso]
+            i += 1;
+        end
+        # @country_list = country_list;
+        @reason_list = [['Size - Too Small', 'Size - Too Small'], ['Size - Too Large', 'Size - Too Large'], ['Style', 'Style'], ['Color', 'Color'], ['Too Expensive', 'Too Expensive']];
+        shop_reason_ids_data = ShopReason.select("id, shop_id, reason_ids").find_by(shop_id: shop_id)
+        unless shop_reason_ids_data.nil?
+            shop_reason_data = Reason.select("id, reason").where(id: JSON.parse(shop_reason_ids_data.reason_ids)).find_all
+        else
+            shop_reason_data = Reason.select("id, reason").find_all
+        end
+        # @shop_reason_ids_data = shop_reason_ids_data
+        # @shop_reason_data = shop_reason_data
+        @reason_list = Array.new
+        i = 0;
+        shop_reason_data.each do |shop_reason|
+            @reason_list[i] = [shop_reason.reason, shop_reason.reason]
+            i += 1;
+        end
+        # Save data to rule table
+        conditions = Hash.new
+        conditions = {"cond_field" => params[:cond_field], "cond_param" => params[:cond_param], "cond_value" => params[:cond_value]}
+        # @conditions_json = conditions.to_json
+        rule_data = Rule.find_by(id: params[:id])
+        @rule_data = rule_data
+        save_rule = rule_data
+        save_rule.update(shop_id: shop_id, name: params[:rule_name], priority: params[:rule_priority], conditions: conditions.to_json)
+        if save_rule.valid?
+            redirect_to '/rules'
+        else
+            @errors_messages = save_rule.errors[:name]
+            render "update_rule"
+        end
+          
+    end
+ 
+    # remove rule data
+    def remove_rule
+        @parmas = params
+        rule = Rule.find_by(id: params[:id]).destroy
+        redirect_to '/rules'
     end
 
     # add options to rule
@@ -240,7 +351,38 @@ class SettingsController < AuthenticatedController
             save_rule_options = RuleOption.find_by(rule_id: rule_id)
             save_rule_options.update(refund_method: params[:refund_method], return_window: params[:return_window],  return_shipping_fee: return_shipping_fee)
         end
-        # redirect_to '/rules'
-        render "add_options_to_rule"
+        redirect_to '/rules'
+        # render "add_options_to_rule"
+    end
+
+    # update option to rule
+    def update_options_to_rule
+        @parmas = params
+        @rule_option_data = RuleOption.find_by(id: params[:id])
+    end
+
+    # submit update option to rule
+    def submit_update_options_to_rule
+        @parmas = params
+        if params[:return_shipping_fee].nil?
+            return_shipping_fee = 0
+        else
+            return_shipping_fee = 1
+        end
+        if params[:return_window].nil?
+            params[:return_window] = 0
+        end
+        @rule_option_data = RuleOption.find_by(id: params[:id])
+        save_rule_options = RuleOption.find_by(id: params[:id])
+        save_rule_options.update(refund_method: params[:refund_method], return_window: params[:return_window],  return_shipping_fee: return_shipping_fee)
+        redirect_to '/rules'
+        # render "update_options_to_rule"
+    end
+
+    # remove rule option
+    def remove_rule_option
+        @parmas = params
+        rule_option = RuleOption.find_by(id: params[:id]).destroy
+        redirect_to '/rules'
     end
 end

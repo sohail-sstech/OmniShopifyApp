@@ -7,6 +7,7 @@
 <% end %>
 
 <%= @params %>
+<%= @errors_messages %>
 
 <div class="box box-info">
   <div class="box-body">
@@ -17,17 +18,26 @@
         <div class="box-header">
           <h4 class="box-title">Product Exclusion Tags</h4>
         </div>
-
-        <%= form_tag('/submit_product_exclusion_tags', method: "post") do %>
-          <%= hidden_field_tag(:shop_id, @shop_id) %>
-          <div class="form-group">
-            <%= label_tag(:exclusion_tags, "Exclusion Tags(Comma separated tags)", :class => "form-label", :for => "exclusion_tags") %>
-            <%= text_field_tag(:exclusion_tags, @no_tags, :class => "form-control" ) %>
+        
+        <div class="box-body">
+          <% unless @errors_messages.nil? %>
+          <div class="alert alert-danger" role="alert">
+            <% @errors_messages.each do |error| %>
+              <p class="mb-0"><%= error %></p>
+            <% end %>
           </div>
-          <hr>
-          <%= submit_tag("Submit", :class => "btn btn-primary") %>
-          <%= link_to 'Back', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
-        <% end %>
+          <% end %>
+          <%= form_tag('/submit_product_exclusion_tags', method: "post") do %>
+            <%= hidden_field_tag(:shop_id, @shop_id) %>
+            <div class="form-group">
+              <%= label_tag(:exclusion_tags, "Exclusion Tags(Comma separated tags)", :class => "form-label", :for => "exclusion_tags") %>
+              <%= text_field_tag(:exclusion_tags, @no_tags, :class => "form-control" ) %>
+            </div>
+            <hr>
+            <%= submit_tag("Submit", :class => "btn btn-primary") %>
+            <%= link_to 'Cancel', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
+          <% end %>
+        </div>
 
       </div>
     </div>
