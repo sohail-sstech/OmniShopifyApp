@@ -31,12 +31,16 @@ class SettingsController < AuthenticatedController
             save_product_exclusion_tag = ProductExclusionTag.create(shop_id: params[:shop_id], tag: params[:exclusion_tags])
             unless save_product_exclusion_tag.valid?
                 @errors_messages = save_product_exclusion_tag.errors[:tag]
+            else
+                flash[:notice] = "Success! Product exclusion tags have been successfully created."
             end
         else
             save_product_exclusion_tag = ProductExclusionTag.find_by(shop_id: params[:shop_id])
             save_product_exclusion_tag.update(tag: params[:exclusion_tags])
             unless save_product_exclusion_tag.valid?
                 @errors_messages = save_product_exclusion_tag.errors[:tag]
+            else
+                flash[:notice] = "Success! Product exclusion tags have been successfully updated."
             end
         end
         # Reset data
@@ -71,9 +75,11 @@ class SettingsController < AuthenticatedController
         shop_reasons = ShopReason.find_by(shop_id: shop_id)
         if shop_reasons.nil?
             save_shop_reasons = ShopReason.create(shop_id: shop_id, reason_ids: selected_reasons)
+            flash[:notice] = "Success! Shop reasons have been successfully updated."
         else
             save_shop_reasons = ShopReason.find_by(shop_id: shop_id)
             save_shop_reasons.update(reason_ids: selected_reasons)
+            flash[:notice] = "Success! Shop reasons have been successfully updated."
         end
         @reasons = Reason.all
         @shop_reasons = ShopReason.find_by(shop_id: shop_id)
@@ -94,6 +100,8 @@ class SettingsController < AuthenticatedController
             save_return_reason = Reason.create(reason: params[:reason])
             unless save_return_reason.valid?
                 @errors_messages = save_return_reason.errors[:reason]
+            else
+                flash[:notice] = "Success! Shop reason has been successfully created."
             end
         # end
         render "add_new_return_reason"
@@ -219,6 +227,7 @@ class SettingsController < AuthenticatedController
         # @conditions_json = conditions.to_json
         save_rule = Rule.create(shop_id: shop_id, name: params[:rule_name], priority: params[:rule_priority], conditions: conditions.to_json)
         if save_rule.valid?
+            flash[:notice] = "Success! Rule has been successfully created."
             redirect_to '/rules'
         else
             @errors_messages = save_rule.errors[:name]
@@ -309,6 +318,7 @@ class SettingsController < AuthenticatedController
         save_rule = rule_data
         save_rule.update(shop_id: shop_id, name: params[:rule_name], priority: params[:rule_priority], conditions: conditions.to_json)
         if save_rule.valid?
+            flash[:notice] = "Success! Rule has been successfully updated."
             redirect_to '/rules'
         else
             @errors_messages = save_rule.errors[:name]
@@ -321,6 +331,7 @@ class SettingsController < AuthenticatedController
     def remove_rule
         @parmas = params
         rule = Rule.find_by(id: params[:id]).destroy
+        flash[:notice] = "Success! Rule has been successfully deleted."
         redirect_to '/rules'
     end
 
@@ -347,9 +358,11 @@ class SettingsController < AuthenticatedController
         rule_option = RuleOption.find_by(rule_id: rule_id)
         if rule_option.nil?
             save_rule_options = RuleOption.create(shop_id: shop_id, rule_id: rule_id, refund_method: params[:refund_method], return_window: params[:return_window],  return_shipping_fee: return_shipping_fee)
+            flash[:notice] = "Success! Rule Option has been successfully created."
         else
             save_rule_options = RuleOption.find_by(rule_id: rule_id)
             save_rule_options.update(refund_method: params[:refund_method], return_window: params[:return_window],  return_shipping_fee: return_shipping_fee)
+            flash[:notice] = "Success! Rule Option has been successfully updated."
         end
         redirect_to '/rules'
         # render "add_options_to_rule"
@@ -375,6 +388,7 @@ class SettingsController < AuthenticatedController
         @rule_option_data = RuleOption.find_by(id: params[:id])
         save_rule_options = RuleOption.find_by(id: params[:id])
         save_rule_options.update(refund_method: params[:refund_method], return_window: params[:return_window],  return_shipping_fee: return_shipping_fee)
+        flash[:notice] = "Success! Rule Option has been successfully updated."
         redirect_to '/rules'
         # render "update_options_to_rule"
     end
@@ -383,6 +397,7 @@ class SettingsController < AuthenticatedController
     def remove_rule_option
         @parmas = params
         rule_option = RuleOption.find_by(id: params[:id]).destroy
+        flash[:notice] = "Success! Rule Option has been successfully deleted."
         redirect_to '/rules'
     end
 end

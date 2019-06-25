@@ -13,15 +13,19 @@
 
     <div class="row">
       <div class="col-md-12">
-
+        <% if flash[:notice] %>
+          <div class="alert alert-success" role="alert">
+            <%= flash[:notice] %>
+          </div>
+        <% end %>
         <div class="box-header mt-3">
           <h4 class="box-title">Webhooks</h4>
         </div>
-        <div class="box-body">
+        <div class="box-body pb-3">
           <div class="list-group">
             <% if @webhooks.present? %>
               <% @webhooks.each do |webhook| %>            
-                <div class="list-group-item"><%= webhook.id %> : <%= webhook.topic %> : <%= webhook.address %> </div>
+                <div class="list-group-item"><%= webhook.id %> : <%= webhook.topic %> : <%= webhook.address %> : <a href="home/remove_webhook/<%= webhook.id %>" onclick="if(!confirm('Are you sure you want to delete this?')) { return false; }">Remove</a></div>
               <% end %>
             <% else %>
               <div class="list-group-item">This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</div>
@@ -35,15 +39,17 @@
             <a class="list-group-item" href="product_exclusion_tags">Product Exclusion Tags</a>
             <a class="list-group-item" href="return_reasons">Return Reasons</a>
             <a class="list-group-item" href="rules">Rules</a>
+            <a class="list-group-item" href="https://www.omniparcelreturns.com/bookreturn" target="_blank">OmniReturns</a>
           </div>
         
           <div class="box-header mt-2">
-            <h4 class="box-title">Test</h4>
+            <h4 class="box-title">Sample</h4>
           </div>
           <div class="list-group">
-            <a class="list-group-item" href="home/test">Home->Test</a>
-            <a class="list-group-item" href="api/index">Api->Index</a>
-            <a class="list-group-item" href="api/test">Api->Test</a>
+            <a class="list-group-item" href="home/test">Home/Test Page</a>
+            <a class="list-group-item" href="home/create_order_webhook">Create Webhook</a>
+            <a class="list-group-item" href="api/get_order_data?shop=queuefirst.myshopify.com&order_no=1038" target="_blank">Sample Order Data</a>
+            <a class="list-group-item" href="api/get_shop_settings?shop=queuefirst.myshopify.com" target="_blank">Sample Shop Settings Data</a>
           </div>
 
         </div>

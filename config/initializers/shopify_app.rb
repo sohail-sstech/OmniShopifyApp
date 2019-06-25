@@ -9,4 +9,7 @@ ShopifyApp.configure do |config|
   config.after_authenticate_job = false
   config.api_version = "2019-04"
   config.session_repository = Shop
+  config.webhooks = [
+    {topic: 'orders/create', address: 'https://orwhitelabel.omniparcelreturns.com/webhook/create_order_webhook', format: 'json'},
+  ]
 end

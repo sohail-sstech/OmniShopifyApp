@@ -33,6 +33,11 @@
             <% end %>
           </div>
           <% end %>
+          <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
           <%= form_tag("/submit_add_reasons", method: "post") do %>
             <div class="form-group">
               <%= label_tag(:reason, "Return Reason", :class => "form-label", :for => "reason") %>

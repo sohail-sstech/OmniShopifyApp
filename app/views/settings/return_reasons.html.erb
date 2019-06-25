@@ -29,25 +29,32 @@
           <h4 class="box-title">Return Reasons</h4>
         </div>
 
-        <%= form_tag({controller: "settings", action: "submit_return_reasons"}, method: "post", class: "shop_reasons") do %>
-        <div class="col-md-12">
-          <div class="form-group row">
-            <% @reasons.each do |row| %>
-              <div class="col-md-4">              
-                  <% checked = false %>
-                  <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
-                  <% checked = true %>
-                  <% end %>
-                  <%= check_box_tag(:'shop_reasons[]', row.id, checked, :class => "form-check-input") %>
-                  <%= label_tag(:shop_reasons, row.reason, :class => "form-label") %>
+        <div class="box-body">
+          <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
+          <%= form_tag({controller: "settings", action: "submit_return_reasons"}, method: "post", class: "shop_reasons") do %>
+            <div class="col-md-12">
+              <div class="form-group row">
+                <% @reasons.each do |row| %>
+                  <div class="col-md-4">              
+                      <% checked = false %>
+                      <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
+                      <% checked = true %>
+                      <% end %>
+                      <%= check_box_tag(:'shop_reasons[]', row.id, checked, :class => "form-check-input") %>
+                      <%= label_tag(:shop_reasons, row.reason, :class => "form-label") %>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
-          </div>
-          <hr>
-          <%= submit_tag("Submit", :class => "btn btn-primary") %>
-          <%= link_to 'Add New Reason', {:controller => 'settings', :action => 'add_new_return_reason'}, :class => "btn btn-primary" %>
-          <%= link_to 'Cancel', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
-        <% end %>
+              <hr>
+              <%= submit_tag("Submit", :class => "btn btn-primary") %>
+              <%= link_to 'Add New Reason', {:controller => 'settings', :action => 'add_new_return_reason'}, :class => "btn btn-primary" %>
+              <%= link_to 'Cancel', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>
+            </div>
+          <% end %>
         </div>
 
       </div>

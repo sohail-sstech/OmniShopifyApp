@@ -28,6 +28,11 @@
         </div>
 
         <div class="box-body mt-3 pb-3">
+          <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
           <table class="table ">
             <% i = 1 %>
             <% @rule_list.each do |rule| %>

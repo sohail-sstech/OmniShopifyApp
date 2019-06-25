@@ -3,9 +3,7 @@ Rails.application.routes.draw do
   mount ShopifyApp::Engine, at: '/'
   get "home/test", :to => 'home#test'
   get "home/create_order_webhook", :to => 'home#create_order_webhook'
-  get "home/remove_webhook", :to => 'home#remove_webhook'
-  get "api/index", :to => 'api#index'
-  get "api/test", :to => 'api#test'
+  get "home/remove_webhook/:webhook_id", :to => 'home#remove_webhook'  
   get "product_exclusion_tags", :to => 'settings#product_exclusion_tags'
   post "product_exclusion_tags", :to => 'settings#product_exclusion_tags'
   post "submit_product_exclusion_tags", :to => 'settings#submit_product_exclusion_tags'
@@ -25,6 +23,12 @@ Rails.application.routes.draw do
   get "update_options_to_rule/:id", to: 'settings#update_options_to_rule'
   post "submit_update_options_to_rule/:id", to: 'settings#submit_update_options_to_rule'
   delete "remove_rule_option/:id", to: "settings#remove_rule_option"
+  get "api/index", :to => 'api#index'
+  get "api/test", :to => 'api#test'
+  get "api/get_order_data", :to => 'api#get_order_data'
+  post "api/get_order_data", :to => 'api#get_order_data'
+  get "api/get_shop_settings", :to => 'api#get_shop_settings'
+  post "api/get_shop_settings", :to => 'api#get_shop_settings'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

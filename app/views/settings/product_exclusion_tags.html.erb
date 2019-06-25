@@ -27,6 +27,11 @@
             <% end %>
           </div>
           <% end %>
+          <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
           <%= form_tag('/submit_product_exclusion_tags', method: "post") do %>
             <%= hidden_field_tag(:shop_id, @shop_id) %>
             <div class="form-group">
