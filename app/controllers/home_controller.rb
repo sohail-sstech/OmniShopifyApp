@@ -22,7 +22,7 @@ class HomeController < AuthenticatedController
   def remove_webhook
     webhook_id = params[:webhook_id]
     unless webhook_id.nil?
-      # ShopifyAPI::Webhook.delete(webhook_id )
+      ShopifyAPI::Webhook.delete(webhook_id)
       flash[:notice] = "Success! You have successfully deleted the webhook."
     else
       flash[:notice] = "Error! Something went wrong!"

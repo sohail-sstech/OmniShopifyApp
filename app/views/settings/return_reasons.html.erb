@@ -41,8 +41,10 @@
                 <% @reasons.each do |row| %>
                   <div class="col-md-4">              
                       <% checked = false %>
-                      <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
-                      <% checked = true %>
+                      <% unless @shop_reasons.nil? %>
+                        <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
+                        <% checked = true %>
+                        <% end %>
                       <% end %>
                       <%= check_box_tag(:'shop_reasons[]', row.id, checked, :class => "form-check-input") %>
                       <%= label_tag(:shop_reasons, row.reason, :class => "form-label") %>

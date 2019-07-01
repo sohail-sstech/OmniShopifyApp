@@ -1,5 +1,5 @@
 ShopifyApp.configure do |config|
-  config.application_name = "My Shopify App"
+  config.application_name = "Omni Return App"
   config.api_key = "64f39020a290ada7b5d2b39c673047f0"
   config.secret = "271f01ed825156d5819dda8e03db3666"
   config.old_secret = "<old_secret>"
@@ -9,7 +9,7 @@ ShopifyApp.configure do |config|
   config.after_authenticate_job = false
   config.api_version = "2019-04"
   config.session_repository = Shop
-  config.webhooks = [
-    {topic: 'orders/create', address: 'https://orwhitelabel.omniparcelreturns.com/webhook/create_order_webhook', format: 'json'},
-  ]
+  # config.webhooks = [
+    # {topic: 'orders/create', address: 'https://test.omnirps.com/webhook/create_order_webhook', format: 'json'},
+  # ]
 end

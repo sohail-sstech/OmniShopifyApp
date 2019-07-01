@@ -29,6 +29,10 @@ Rails.application.routes.draw do
   post "api/get_order_data", :to => 'api#get_order_data'
   get "api/get_shop_settings", :to => 'api#get_shop_settings'
   post "api/get_shop_settings", :to => 'api#get_shop_settings'
+  get "api/get_product_data", :to => 'api#get_product_data'
+  post "api/get_product_data", :to => 'api#get_product_data'
+  get "api/refund_order_product_to_customer", :to => 'api#refund_order_product_to_customer'
+  post "api/refund_order_product_to_customer", :to => 'api#refund_order_product_to_customer'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

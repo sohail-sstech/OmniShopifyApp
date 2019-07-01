@@ -114,6 +114,8 @@ class SettingsController < AuthenticatedController
         shop = Shop.find_by(shopify_domain: current_shop_domain)
         shop_id = shop.id
         @cond_field_harr = {'OV' => 'Order Value', 'ODV' => 'Order Discount Value', 'ODP' => 'Order Discount Percent', 'OC' => 'Order Country', 'ORR' => 'Order Return Reason'};
+        @cond_param_harr = {'GT' => 'Greater Than', 'LT' =>'Less Than', 'GTET' => 'Greater Than or Equal to', 'LTET' => 'Less Than or Equal to', 'ET' => 'Equal to',  'IET' => 'Is', 'INET' => 'Is Not'}
+        
         country_data = Country.select("id, iso, nicename").find_all
         @country_harr = Hash.new
         country_data.each do |country|
@@ -135,8 +137,8 @@ class SettingsController < AuthenticatedController
         shop_id = shop.id
         @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
         @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
-        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
-        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @cond_param_compare_list = [['Greater Than', 'GT'], ['Less Than', 'LT'], ['Greater Than or Equal to', 'GTET'], ['Less Than or Equal to', 'LTET'], ['Equal to', 'ET']];
+        @cond_param_boolean_list = [['Is', 'IET'], ['Is Not', 'INET']];
         if params[:rule_type] == '1'
             selected_cond_filed = 'OC'
         elsif params[:rule_type] == '2'
@@ -183,8 +185,8 @@ class SettingsController < AuthenticatedController
         shop_id = shop.id
         @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
         @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
-        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
-        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @cond_param_compare_list = [['Greater Than', 'GT'], ['Less Than', 'LT'], ['Greater Than or Equal to', 'GTET'], ['Less Than or Equal to', 'LTET'], ['Equal to', 'ET']];
+        @cond_param_boolean_list = [['Is', 'IET'], ['Is Not', 'INET']];
         if params[:rule_type] == '1'
             selected_cond_filed = 'OC'
         elsif params[:rule_type] == '2'
@@ -244,8 +246,8 @@ class SettingsController < AuthenticatedController
         shop_id = shop.id
         @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
         @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
-        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
-        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @cond_param_compare_list = [['Greater Than', 'GT'], ['Less Than', 'LT'], ['Greater Than or Equal to', 'GTET'], ['Less Than or Equal to', 'LTET'], ['Equal to', 'ET']];
+        @cond_param_boolean_list = [['Is', 'IET'], ['Is Not', 'INET']];
         @selected_cond_filed = 'OV'
         # @country_list = [['United States', 'US'], ['United Kingdom', 'UK'], ['Australia', 'AU'], ['New Zealand', 'NZ'], ['India', 'IN']];
         country_data = Country.select("id, iso, nicename").find_all
@@ -282,8 +284,8 @@ class SettingsController < AuthenticatedController
         shop_id = shop.id
         @rule_priority_list = [['1', 1], ['2', 2], ['3', 3], ['4', 4], ['5', 5]];
         @cond_field_list = [['Order Value', 'OV'], ['Order Discount Value', 'ODV'], ['Order Discount Percent', 'ODP'], ['Order Country', 'OC'], ['Order Return Reason', 'ORR']];
-        @cond_param_compare_list = [['Greater Than', '>'], ['Less Than', '<'], ['Greater Than or Equal to', '>='], ['Less Than or Equal to', '<='], ['Equal to', '=']];
-        @cond_param_boolean_list = [['Is', '='], ['Is Not', '<>']];
+        @cond_param_compare_list = [['Greater Than', 'GT'], ['Less Than', 'LT'], ['Greater Than or Equal to', 'GTET'], ['Less Than or Equal to', 'LTET'], ['Equal to', 'ET']];
+        @cond_param_boolean_list = [['Is', 'IET'], ['Is Not', 'INET']];
         @selected_cond_filed = 'OV'
         # @country_list = [['United States', 'US'], ['United Kingdom', 'UK'], ['Australia', 'AU'], ['New Zealand', 'NZ'], ['India', 'IN']];
         country_data = Country.select("id, iso, nicename").find_all

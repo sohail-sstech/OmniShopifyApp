@@ -43,7 +43,7 @@
                   <% conditions_arr = JSON.parse(rule.conditions) %>
                   <% j = 0 %>
                   <% conditions_arr['cond_field'].each do |cond_field_v| %>
-                    <%= @cond_field_harr[conditions_arr['cond_field'][j]] %> <%= conditions_arr['cond_param'][j] %> <% if cond_field_v == 'OC'  %><%= @country_harr[conditions_arr['cond_value'][j]] %><% else %><%= conditions_arr['cond_value'][j] %><% end %><br/>
+                    <%= @cond_field_harr[conditions_arr['cond_field'][j]] %> <%= @cond_param_harr[conditions_arr['cond_param'][j]] %> <% if cond_field_v == 'OC'  %><%= @country_harr[conditions_arr['cond_value'][j]] %><% else %><%= conditions_arr['cond_value'][j] %><% end %><br/>
                     <% j += 1 %>
                   <% end %>
                 </td>
