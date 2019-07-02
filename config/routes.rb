@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post "submit_return_reasons", :to => 'settings#submit_return_reasons'
   get "add_reasons", :to => 'settings#add_new_return_reason'
   post "submit_add_reasons", :to => 'settings#submit_add_new_return_reason'
+  delete "remove_shop_reason/:id", to: "settings#remove_shop_reason"
   get "rules", :to => 'settings#rules'
   get "select_rule", :to => 'settings#select_rule'
   get "create_rule/:rule_type", to: 'settings#create_rule' # @rule_type 1 = Country, 2 = Order Value, 3 = Order Discount, 4 = Return Reason

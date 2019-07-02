@@ -51,6 +51,24 @@
                   </div>
                 <% end %>
               </div>
+
+              <p class="font-weight-bold font-italic text-decoration-underline">Custom Created Return Reasons By Shop Owner</p>
+              <div class="form-group row">
+                <% @shop_created_reasons.each do |row| %>
+                  <div class="col-md-12">              
+                      <% checked = false %>
+                      <% unless @shop_reasons.nil? %>
+                        <% if @shop_reasons.reason_ids.include?("#{row.id}") %>
+                        <% checked = true %>
+                        <% end %>
+                      <% end %>
+                      <%= check_box_tag(:'shop_reasons[]', row.id, checked, :class => "form-check-input") %>
+                      <%= label_tag(:shop_reasons, row.reason, :class => "form-label") %>
+                      <%= link_to 'Delete', {:controller => 'settings', :action => 'remove_shop_reason', :id => row.id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>
+                  </div>
+                <% end %>
+              </div>
+
               <hr>
               <%= submit_tag("Submit", :class => "btn btn-primary") %>
               <%= link_to 'Add New Reason', {:controller => 'settings', :action => 'add_new_return_reason'}, :class => "btn btn-primary" %>

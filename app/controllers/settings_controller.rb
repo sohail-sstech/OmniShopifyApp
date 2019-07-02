@@ -60,7 +60,8 @@ class SettingsController < AuthenticatedController
         shop = Shop.find_by(shopify_domain: current_shop_domain)
         @selected_reasons = params[:shop_reasons].to_json
         shop_id = shop.id
-        @reasons = Reason.all
+        @reasons = Reason.where("shop_id IS NULL").find_all
+        @shop_created_reasons = Reason.where("shop_id = ?", shop_id).find_all
         @shop_reasons = ShopReason.find_by(shop_id: shop_id)
     end
 
@@ -81,7 +82,8 @@ class SettingsController < AuthenticatedController
             save_shop_reasons.update(reason_ids: selected_reasons)
             flash[:notice] = "Success! Shop reasons have been successfully updated."
         end
-        @reasons = Reason.all
+        @reasons = Reason.where("shop_id IS NULL").find_all
+        @shop_created_reasons = Reason.where("shop_id = ?", shop_id).find_all
         @shop_reasons = ShopReason.find_by(shop_id: shop_id)
         render "return_reasons"
     end
@@ -94,10 +96,14 @@ class SettingsController < AuthenticatedController
     # return reason action
     def submit_add_new_return_reason
         @params = params
+        current_shop_domain = ShopifyAPI::Shop.current.domain
+        shop = Shop.find_by(shopify_domain: current_shop_domain)
+        @selected_reasons = params[:shop_reasons].to_json
+        shop_id = shop.id
         # @display = "above unless #{@params[:reason]}"
         # unless params[:reason].empty?
             # @display = "in unless #{@params[:reason]}"
-            save_return_reason = Reason.create(reason: params[:reason])
+            save_return_reason = Reason.create(shop_id: shop_id, reason: params[:reason])
             unless save_return_reason.valid?
                 @errors_messages = save_return_reason.errors[:reason]
             else
@@ -105,6 +111,14 @@ class SettingsController < AuthenticatedController
             end
         # end
         render "add_new_return_reason"
+    end
+
+    # remove reason
+    def remove_shop_reason
+        @parmas = params
+        reason = Reason.find_by(id: params[:id]).destroy
+        flash[:notice] = "Success! Reason has been successfully deleted."
+        redirect_to '/return_reasons'
     end
 
     # rules for return product
