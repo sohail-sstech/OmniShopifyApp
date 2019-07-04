@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   root :to => 'home#index'
   mount ShopifyApp::Engine, at: '/'
+  post "home/submit_update_shop_settings", :to => 'home#submit_update_shop_settings'
+  get "home/reconfig_shop_settings", :to => 'home#reconfig_shop_settings'
+  post "home/submit_reconfig_shop_settings", :to => 'home#submit_reconfig_shop_settings'
   get "home/test", :to => 'home#test'
   get "home/create_order_webhook", :to => 'home#create_order_webhook'
+  get "home/create_uninstall_app_webhook", :to => 'home#create_uninstall_app_webhook'
   get "home/remove_webhook/:webhook_id", :to => 'home#remove_webhook'  
   get "product_exclusion_tags", :to => 'settings#product_exclusion_tags'
   post "product_exclusion_tags", :to => 'settings#product_exclusion_tags'
@@ -34,6 +38,11 @@ Rails.application.routes.draw do
   post "api/get_product_data", :to => 'api#get_product_data'
   get "api/refund_order_product_to_customer", :to => 'api#refund_order_product_to_customer'
   post "api/refund_order_product_to_customer", :to => 'api#refund_order_product_to_customer'
+  get "webhook/index", :to => 'webhook#index'
+  post "webhook/index", :to => 'webhook#index'
+  get "webhook/test", :to => 'webhook#test'
+  get "webhook/uninstall_app", :to => 'webhook#uninstall_app'
+  post "webhook/uninstall_app", :to => 'webhook#uninstall_app'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

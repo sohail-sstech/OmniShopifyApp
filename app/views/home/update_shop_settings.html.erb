@@ -1,0 +1,57 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({ title: "Configuration" });
+    });
+  </script>
+<% end %>
+
+<%= @params %>
+
+<% if (@params[:controller] == 'home') && (@params[:action] == 'index' || @params[:action] == 'submit_update_shop_settings') %>
+<% form_action =  "/home/submit_update_shop_settings" %>
+<% else %>
+<% form_action =  "/home/submit_reconfig_shop_settings" %>
+<% end %>
+
+<% unless @shop_setting['token'].nil? %>
+<% shop_token = @shop_setting['token'] %>
+<% else %>
+<% shop_token = '' %>
+<% end %>
+<div class="box box-info">
+  <div class="box-body">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box-header mt-3">
+          <h4 class="box-title">Configuration</h4>
+        </div>
+        <div class="box-body">
+          <% unless @errors_messages.nil? %>
+          <div class="alert alert-danger" role="alert">
+            <% @errors_messages.each do |error| %>
+              <p class="mb-0"><%= error %></p>
+            <% end %>
+          </div>
+          <% end %>
+          <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
+          <%= form_tag(form_action, method: "post") do %>
+            <div class="form-group">
+              <%= label_tag(:token, "Access Token", :class => "form-label", :for => "token") %>
+              <%= text_field_tag(:token, shop_token, :class => "form-control") %>
+            </div>
+            <hr>
+            <%= submit_tag("Submit", :class => "btn btn-primary") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

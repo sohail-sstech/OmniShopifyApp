@@ -340,7 +340,6 @@ class SettingsController < AuthenticatedController
             @errors_messages = save_rule.errors[:name]
             render "update_rule"
         end
-          
     end
  
     # remove rule data
