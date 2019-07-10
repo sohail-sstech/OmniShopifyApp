@@ -318,7 +318,6 @@ class ApiController < ApplicationController
         unless params[:ShopifyOrderId].nil?
           order_data = ShopifyAPI::Order.find(params[:ShopifyOrderId])
         else
-          shop_settings['shop_rules'].each do |rule|
           shopify_order_number = params[:OrderNo].gsub("#", "")
           order_data = ShopifyAPI::Order.find(:first, :params => {:name => shopify_order_number})
         end
