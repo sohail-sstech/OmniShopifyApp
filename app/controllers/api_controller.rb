@@ -38,7 +38,9 @@ class ApiController < ApplicationController
           ShopifyAPI::Base.activate_session(session)
           
           # Get shopify order data
-          order_data = ShopifyAPI::Order.find(:all, params: { order_number: order_no, :limit => 1, :order => "created_at ASC"})
+          shopify_order_number = order_no.gsub("#", "")
+          order_data = ShopifyAPI::Order.find(:first, :params => {:name => shopify_order_number})
+          # order_data = ShopifyAPI::Order.find(:all, params: { order_number: order_no, :limit => 1, :order => "created_at ASC"})
 
           @response["Success"] = 1
           @response["Message"] = "You have successfully got the order data."
@@ -314,53 +316,68 @@ class ApiController < ApplicationController
         ShopifyAPI::Base.activate_session(session)
         
         unless params[:ShopifyOrderId].nil?
-          order_data = ShopifyAPI::Order.find(:first, {id: params[:ShopifyOrderId]})
+          order_data = ShopifyAPI::Order.find(params[:ShopifyOrderId])
         else
-          order_data = ShopifyAPI::Order.find(:first, {order_number: params[:OrderNo]})
-        end        
-        refund = 1 # 1 = Refund, 2 = Store Credit
-        is_return_shipping_fee = 0
-        unless shop_settings['shop_rules'].nil?
           shop_settings['shop_rules'].each do |rule|
-            rule_applied = false
-            unless rule['cond_field'].nil?
-              i=0
-              false_cond_count=0;
-              true_cond_count=0;
-              rule['cond_field'].each do |cond_field|
-                check_cond = self.check_rule_conditions(cond_field, rule['cond_param'][i], rule['cond_value'][i], order_data)
-                if check_cond == 1
-                  true_cond_count += 1;
-                else
-                  false_cond_count += 0;
+          shopify_order_number = params[:OrderNo].gsub("#", "")
+          order_data = ShopifyAPI::Order.find(:first, :params => {:name => shopify_order_number})
+        end
+        # order_data = ShopifyAPI::Order.find(:first, :params => {:name => 1002})
+        refund = 1 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 
+        if order_data.nil?
+          refund = 0
+        else
+          is_return_shipping_fee = 0
+          unless shop_settings['shop_rules'].nil?
+            shop_settings['shop_rules'].each do |rule|
+              rule_applied = false
+              unless rule['cond_field'].nil?
+                i=0
+                false_cond_count=0;
+                true_cond_count=0;
+                rule['cond_field'].each do |cond_field|
+                  check_cond = self.check_rule_conditions(cond_field, rule['cond_param'][i], rule['cond_value'][i], order_data)
+                  if check_cond == 1
+                    true_cond_count += 1;
+                  else
+                    false_cond_count += 0;
+                  end
+                  i += 1
                 end
-                i += 1
-              end
-              if true_cond_count > 0 || false_cond_count > 0
-                is_return_shipping_fee = rule['return_shipping_fee'];
-                rule_applied = true                
+                if true_cond_count > 0 || false_cond_count > 0
+                  is_return_shipping_fee = rule['return_shipping_fee'];
+                  rule_applied = true                
+                else
+                  rule_applied = false
+                end
+                if true_cond_count > 0 && false_cond_count == 0
+                  refund = rule['refund_method'];
+                end
               else
                 rule_applied = false
               end
-              if true_cond_count > 0 && false_cond_count == 0
-                refund = rule['refund_method'];
+              if rule_applied == true
+                break
               end
-            else
-              rule_applied = false
             end
-            if rule_applied == true
-              break
-            end
+          else
+            refund = 1
           end
-        else
-          refund = 1
-        end        
+        end
+
+
       end
     end
 
+    # render :json => order_data
+# =begin
     # refund = 2
     # Check if we do not get shop settings
-    if shop_settings['Success'] == 0
+    if refund == 0
+      @response["Success"] = 1
+      #@response["Type"] = ''
+      @response["Message"] = "Order data not available."
+    elsif shop_settings['Success'] == 0
       @response["Success"] = 0
       @response["Type"] = 'error'
       @response["Message"] = shop_settings['Message']
@@ -385,7 +402,7 @@ class ApiController < ApplicationController
           line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price_set.presentment_money.amount.to_f
         end
         gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
-        ### store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
+        store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
         gift_card_arr.push(gift_card_hash)
       end
       @response["Success"] = 1
@@ -417,14 +434,16 @@ class ApiController < ApplicationController
         j += 1
       end
       refund_hash['refund_line_items'] = refund_line_items
-      ### refund_order_call = order_data::Refund.create(refund_hash);
+      refund_order_call = order_data::Refund.create(refund_hash);
       # render :json => refund_hash
       @response["Success"] = 1
       @response["Type"] = 'refund'
       @response["Message"] = "Called Order Refund Admin API."
       @response["Data"] = refund_order_call
     end
+    # Response data
     render :json => @response
+# =end
   end
 
   # This action is for test
