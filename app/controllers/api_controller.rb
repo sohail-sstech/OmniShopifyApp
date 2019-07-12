@@ -413,8 +413,8 @@ class ApiController < ApplicationController
     else
       refund_order_call = Hash.new
       refund_hash = Hash.new
-      refund_hash['currency'] = order_data.currency
-      refund_hash['notify'] = true
+      refund_hash['order_id'] = order_data.id
+      refund_hash['restock'] = false
       refund_hash['note'] = params[:ReturnReason]
       if is_return_shipping_fee == 1
         shipping = Hash["full_refund" => true]
@@ -428,20 +428,26 @@ class ApiController < ApplicationController
         temp_line = Hash.new
         temp_line['line_item_id'] = item['ShopifyOrderLineItemId']
         temp_line['quantity'] = item['ItemQuantity']
-        temp_line['restock_type'] = false
+        # temp_line['restock_type'] = false
         refund_line_items.push(temp_line);
         j += 1
       end
       refund_hash['refund_line_items'] = refund_line_items
-      refund_order_call = order_data::Refund.create(refund_hash);
+      refund_hash['currency'] = order_data.currency
+      refund_hash['notify'] = true
       # render :json => refund_hash
+      refund_order_call = ShopifyAPI::Refund.create(refund_hash);
+      render :json => refund_order_call
+      # refund_order_data = ShopifyAPI::Order.find(order_data.id)
+      # refund_params = {:restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true}
+      # refund_order_call = ShopifyAPI::Refund.create( :order_id => order_data.id, :restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true );
       @response["Success"] = 1
       @response["Type"] = 'refund'
       @response["Message"] = "Called Order Refund Admin API."
       @response["Data"] = refund_order_call
     end
     # Response data
-    render :json => @response
+    # render :json => @response
 # =end
   end
 
@@ -496,4 +502,5 @@ class ApiController < ApplicationController
     @get_shop_data = Shop.where(shopify_domain: "queuefirst.myshopify.com").first
     
   end
+  
 end

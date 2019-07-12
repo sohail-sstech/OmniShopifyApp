@@ -415,4 +415,5 @@ class SettingsController < AuthenticatedController
         flash[:notice] = "Success! Rule Option has been successfully deleted."
         redirect_to '/rules'
     end
+    
 end

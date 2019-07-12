@@ -26,7 +26,7 @@ class HomeController < AuthenticatedController
     else
         require 'httparty'
         require 'json'
-        url = 'https://test.omnirps.com/api/check_retailer_available'
+        url = @@omnirps_check_retailer_available_url
         request_data = Hash.new
         request_data['Token'] = params[:token]
         request_data['ShopifyShopDomain'] = current_shop_domain
@@ -35,11 +35,11 @@ class HomeController < AuthenticatedController
         response_data = JSON.parse(response.body)
         if !response_data['Success'].nil? && response_data['Success'] == 1
           # order create webhook
-          order_create_wh = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "https://test.omnirps.com/webhook/create_order_webhook", :format => "json"})
+          order_create_wh = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "#{@@omnirps_create_order_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
           order_create_wh.save
           order_create_wh_id = order_create_wh["id"]
           # uninstall app webhook
-          uninstall_app_wh = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "https://eeb0675f.ngrok.io/webhook/uninstall_app", :format => "json"})
+          uninstall_app_wh = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "#{@@shopify_uninstall_app_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
           uninstall_app_wh.save
           uninstall_app_wh_id = uninstall_app_wh["id"]
           # Save data to shop settings
@@ -80,7 +80,7 @@ class HomeController < AuthenticatedController
     else
         require 'httparty'
         require 'json'
-        url = 'https://test.omnirps.com/api/check_retailer_available'
+        url = @@omnirps_check_retailer_available_url
         request_data = Hash.new
         request_data['Token'] = params[:token]
         request_data['ShopifyShopDomain'] = current_shop_domain
@@ -114,7 +114,9 @@ class HomeController < AuthenticatedController
 
   # Create order webhook
   def create_order_webhook
-    new_webhook = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "https://test.omnirps.com/webhook/create_order_webhook", :format => "json"})
+    @params = params
+    current_shop_domain = ShopifyAPI::Shop.current.domain
+    new_webhook = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "#{@@omnirps_create_order_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
     new_webhook.save
     # @webhooks = ShopifyAPI::Webhook.find(:all)
     flash[:notice] = "Success! You have successfully created the webhook."
@@ -123,7 +125,9 @@ class HomeController < AuthenticatedController
 
   # Create uninstall app webhook
   def create_uninstall_app_webhook
-    new_webhook = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "https://e8b10886.ngrok.io/webhook/uninstall_app", :format => "json"})
+    @params = params
+    current_shop_domain = ShopifyAPI::Shop.current.domain
+    new_webhook = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "#{@@shopify_uninstall_app_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
     new_webhook.save
     # render :json => new_webhook
     # @webhooks = ShopifyAPI::Webhook.find(:all)
@@ -158,4 +162,5 @@ class HomeController < AuthenticatedController
     response = Net::HTTP.post_form(uri, params)
 =end
   end
+
 end

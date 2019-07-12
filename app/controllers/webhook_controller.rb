@@ -49,7 +49,7 @@ class WebhookController < ApplicationController
         require 'httparty'
         require 'json'
         # url = 'http://example.com/resource'
-        url = 'http://test.omnirps.com/api/check_retailer_available'
+        url = @@omnirps_check_retailer_available_url
         response = HTTParty.get(url)
         # response.parsed_response
         # render :json => JSON.parse(response.body)

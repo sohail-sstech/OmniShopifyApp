@@ -14,7 +14,7 @@
 <% form_action =  "/home/submit_reconfig_shop_settings" %>
 <% end %>
 
-<% unless @shop_setting['token'].nil? %>
+<% unless @shop_setting.nil? %>
 <% shop_token = @shop_setting['token'] %>
 <% else %>
 <% shop_token = '' %>
