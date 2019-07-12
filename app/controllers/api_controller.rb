@@ -437,7 +437,7 @@ class ApiController < ApplicationController
       refund_hash['notify'] = true
       # render :json => refund_hash
       refund_order_call = ShopifyAPI::Refund.create(refund_hash);
-      render :json => refund_order_call
+      # render :json => refund_order_call
       # refund_order_data = ShopifyAPI::Order.find(order_data.id)
       # refund_params = {:restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true}
       # refund_order_call = ShopifyAPI::Refund.create( :order_id => order_data.id, :restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true );
@@ -447,7 +447,7 @@ class ApiController < ApplicationController
       @response["Data"] = refund_order_call
     end
     # Response data
-    # render :json => @response
+    render :json => @response
 # =end
   end
 
