@@ -37,11 +37,11 @@ class HomeController < AuthenticatedController
           # order create webhook
           order_create_wh = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "#{@@omnirps_create_order_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
           order_create_wh.save
-          order_create_wh_id = order_create_wh["id"]
+          order_create_wh_id = order_create_wh.id
           # uninstall app webhook
           uninstall_app_wh = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "#{@@shopify_uninstall_app_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
           uninstall_app_wh.save
-          uninstall_app_wh_id = uninstall_app_wh["id"]
+          uninstall_app_wh_id = uninstall_app_wh.id
           # Save data to shop settings
           save_shop_setting = ShopSetting.create(shop_id: shop.id, token: params[:token], create_order_webhook_id: order_create_wh_id, uninstall_app_webhook_id: uninstall_app_wh_id)
           unless save_shop_setting.valid?

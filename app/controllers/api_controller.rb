@@ -191,7 +191,8 @@ class ApiController < ApplicationController
     return_val=0
     if cond_param == 'IET'
       if cond_field_value == 'OC'
-        if order_data['shipping_address']['country_code'] == cond_value
+        # if order_data['shipping_address']['country_code'] == cond_value
+        if order_data.shipping_address.country_code == cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ORR'
@@ -201,7 +202,7 @@ class ApiController < ApplicationController
       end
     elsif cond_param == 'INET'
       if cond_field_value == 'OC'
-        if order_data['shipping_address']['country_code'] != cond_value
+        if order_data.shipping_address.country_code != cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ORR'
@@ -211,75 +212,75 @@ class ApiController < ApplicationController
       end
     elsif cond_param == 'GT'
       if cond_field_value == 'OV'
-        if order_data['total_price'] > cond_value
+        if order_data.total_price. > cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODV'
-        if order_data['total_discount'] > cond_value
+        if order_data.total_discount > cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODP'
-        discount_per = (order_data['total_discount']*100)/order_data['total_price'];
+        discount_per = (order_data.total_discount*100)/order_data.total_price;
         if discount_per > cond_value
           return_val = 1
         end
       end
     elsif cond_param == 'LT'
       if cond_field_value == 'OV'
-        if order_data['total_price'] < cond_value
+        if order_data.total_price < cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODV'
-        if order_data['total_discount'] < cond_value
+        if order_data.total_discount < cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODP'
-        discount_per = (order_data['total_discount']*100)/order_data['total_price'];
+        discount_per = (order_data.total_discount*100)/order_data.total_price;
         if discount_per < cond_value
           return_val = 1
         end
       end
     elsif cond_param == 'GTET'
       if cond_field_value == 'OV'
-        if order_data['total_price'] >= cond_value
+        if order_data.total_price >= cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODV'
-        if order_data['total_discount'] >= cond_value
+        if order_data.total_discount >= cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODP'
-        discount_per = (order_data['total_discount']*100)/order_data['total_price'];
+        discount_per = (order_data.total_discount*100)/order_data.total_price;
         if discount_per >= cond_value
           return_val = 1
         end
       end
     elsif cond_param == 'LTET'
       if cond_field_value == 'OV'
-        if order_data['total_price'] <= cond_value
+        if order_data.total_price <= cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODV'
-        if order_data['total_discount'] <= cond_value
+        if order_data.total_discount <= cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODP'
-        discount_per = (order_data['total_discount']*100)/order_data['total_price'];
+        discount_per = (order_data.total_discount*100)/order_data.total_price;
         if discount_per <= cond_value
           return_val = 1
         end
       end
     elsif cond_param == 'ET'
       if cond_field_value == 'OV'
-        if order_data['total_price'] == cond_value
+        if order_data.total_price == cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODV'
-        if order_data['total_discount'] == cond_value
+        if order_data.total_discount == cond_value
           return_val = 1
         end
       elsif cond_field_value == 'ODP'
-        discount_per = (order_data['total_discount']*100)/order_data['total_price'];
+        discount_per = (order_data.total_discount*100)/order_data.total_price;
         if discount_per == cond_value
           return_val = 1
         end
@@ -323,19 +324,22 @@ class ApiController < ApplicationController
         end
         # order_data = ShopifyAPI::Order.find(:first, :params => {:name => 1002})
         refund = 1 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 
+        test_app = 0
         if order_data.nil?
           refund = 0
         else
+          # logger.debug "in else"
           is_return_shipping_fee = 0
           unless shop_settings['shop_rules'].nil?
             shop_settings['shop_rules'].each do |rule|
               rule_applied = false
-              unless rule['cond_field'].nil?
+              unless rule['conditions']['cond_field'].nil?
                 i=0
                 false_cond_count=0;
                 true_cond_count=0;
-                rule['cond_field'].each do |cond_field|
-                  check_cond = self.check_rule_conditions(cond_field, rule['cond_param'][i], rule['cond_value'][i], order_data)
+                rule['conditions']['cond_field'].each do |cond_field|
+                  # check_cond = 0
+                  check_cond = self.check_rule_conditions(cond_field, rule['conditions']['cond_param'][i], rule['conditions']['cond_value'][i], order_data)
                   if check_cond == 1
                     true_cond_count += 1;
                   else
@@ -343,6 +347,9 @@ class ApiController < ApplicationController
                   end
                   i += 1
                 end
+                # test_app = 1
+                # render :plain => "#{true_cond_count} and #{false_cond_count} "
+                # logger.debug "True Count: #{true_cond_count}, False Count: #{false_cond_count}"
                 if true_cond_count > 0 || false_cond_count > 0
                   is_return_shipping_fee = rule['return_shipping_fee'];
                   rule_applied = true                
@@ -351,6 +358,7 @@ class ApiController < ApplicationController
                 end
                 if true_cond_count > 0 && false_cond_count == 0
                   refund = rule['refund_method'];
+                  # render :json => refund
                 end
               else
                 rule_applied = false
@@ -363,17 +371,18 @@ class ApiController < ApplicationController
             refund = 1
           end
         end
-
-
       end
     end
 
-    # render :json => order_data
-# =begin
+    if test_app == 0
+      # render :json => refund # shop_settings['shop_rules']
+      # render :plain => "test app: #{test_app}"
+    end
+#=begin
     # refund = 2
     # Check if we do not get shop settings
     if refund == 0
-      @response["Success"] = 1
+      @response["Success"] = 0
       #@response["Type"] = ''
       @response["Message"] = "Order data not available."
     elsif shop_settings['Success'] == 0
@@ -386,23 +395,29 @@ class ApiController < ApplicationController
       store_credit_call = Hash.new
       gift_card_arr = Array.new
       order_data.line_items.each do |line_item|
-        gift_card_hash = Hash.new
-        number = 20
-        charset = Array('A'..'Z')
-        gift_card_code = Array.new(number) { charset.sample }.join
-        gift_card_hash['code'] = gift_card_code
-        gift_card_hash['currency'] = order_data.currency
-        gift_card_hash['customer_id'] = order_data.customer.id
-        gift_card_hash['order_id'] = order_data.id    
-        gift_card_hash['line_item_id'] = line_item.id
-        line_item_amount = line_item.price_set.presentment_money.amount;
-        line_item_tax_amount = 0
-        line_item.tax_lines.each do |tax_amount|
-          line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price_set.presentment_money.amount.to_f
+        params[:RefundItems].each do |item|
+          if item['ShopifyOrderLineItemId'] == line_item.id
+            gift_card_hash = Hash.new
+            number = 20
+            charset = Array('A'..'Z')
+            gift_card_code = Array.new(number) { charset.sample }.join
+            gift_card_hash['code'] = gift_card_code
+            gift_card_hash['currency'] = order_data.currency
+            gift_card_hash['customer_id'] = order_data.customer.id
+            gift_card_hash['order_id'] = order_data.id    
+            gift_card_hash['line_item_id'] = line_item.id
+            line_item_amount = line_item.price_set.presentment_money.amount;
+            line_item_tax_amount = 0
+            line_item.tax_lines.each do |tax_amount|
+              line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price_set.presentment_money.amount.to_f
+            end
+            gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
+            # render :json => gift_card_hash
+            store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
+            # render :json => store_credit_call
+            gift_card_arr.push(gift_card_hash)
+          end
         end
-        gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
-        store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
-        gift_card_arr.push(gift_card_hash)
       end
       @response["Success"] = 1
       @response["Type"] = 'gift_card'
@@ -410,11 +425,11 @@ class ApiController < ApplicationController
       @response["Data"] = store_credit_call
       # render :json => gift_card_arr
     # Apply Refund to The Customer
-    else
+    elsif refund == 1
       refund_order_call = Hash.new
       refund_hash = Hash.new
       refund_hash['order_id'] = order_data.id
-      refund_hash['restock'] = false
+      # refund_hash['restock'] = false
       refund_hash['note'] = params[:ReturnReason]
       if is_return_shipping_fee == 1
         shipping = Hash["full_refund" => true]
@@ -436,8 +451,10 @@ class ApiController < ApplicationController
       refund_hash['currency'] = order_data.currency
       refund_hash['notify'] = true
       # render :json => refund_hash
-      refund_order_call = ShopifyAPI::Refund.create(refund_hash);
+      refund_order_call = ShopifyAPI::Refund.create(refund_hash); # main call
       # render :json => refund_order_call
+
+      # refund_order_call = ShopifyAPI::Refund.calculate({ :shipping => { :amount => 0 } }, :params => {:order_id => order_data.id});
       # refund_order_data = ShopifyAPI::Order.find(order_data.id)
       # refund_params = {:restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true}
       # refund_order_call = ShopifyAPI::Refund.create( :order_id => order_data.id, :restock => false, :note => "ARRIVED TOO LATE", :shipping => {:full_refund => false}, :refund_line_items => [{:line_item_id => 2218568253503, :quantity => 1}], :currency => "INR", :notify => true );
@@ -445,10 +462,15 @@ class ApiController < ApplicationController
       @response["Type"] = 'refund'
       @response["Message"] = "Called Order Refund Admin API."
       @response["Data"] = refund_order_call
+    else
+      @response["Success"] = 0
+      #@response["Type"] = ''
+      @response["Message"] = "Something went wrong!"
     end
     # Response data
     render :json => @response
-# =end
+#=end
+
   end
 
   # This action is for test
@@ -466,13 +488,17 @@ class ApiController < ApplicationController
     # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
     ShopifyAPI::Base.activate_session(session)
 
+    #@gift_card = ShopifyAPI::GiftCard.create()
+    @gift_card = ShopifyAPI::GiftCard.find(185757892671)
+    render :json => @gift_card
+
+=begin
     @products = ShopifyAPI::Product.find(:all, {id: 1892575608895})
     # @products_metafield = ShopifyAPI::Metafield.find(:all, :params=>{:resource => "products", :resource_id => 1892575608895})
     @products_metafield = ShopifyAPI::Metafield.find(:all)
     # Render JSON
     # render :json => @products_metafield
 
-=begin
     @shop = ShopifyAPI::Shop.current
 
     # Get all products
@@ -483,14 +509,13 @@ class ApiController < ApplicationController
 
     # Get all orders
     @orders = ShopifyAPI::Order.find(:all)
-=end
 
     # Fetch all countries data
     @all_countries = ShopifyAPI::Country.find(:all, params: {}).to_json
 
     # Specific order from shopify store
     @specific_order = ShopifyAPI::Order.find(:all, params: { order_number: '1001', :limit => 1, :order => "created_at ASC"}).to_json
-    render :json => @specific_order
+    # render :json => @specific_order
 
     # Shops list from database
     @shops = Shop.all.to_json
@@ -500,7 +525,9 @@ class ApiController < ApplicationController
 
     # Get shop data
     @get_shop_data = Shop.where(shopify_domain: "queuefirst.myshopify.com").first
-    
+=end
+
+
   end
   
 end
