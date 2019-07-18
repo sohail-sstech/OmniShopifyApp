@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   delete "remove_rule_option/:id", to: "settings#remove_rule_option"
   get "api/index", :to => 'api#index'
   get "api/test", :to => 'api#test'
+  get "api/test_one", :to => 'api#test_one'
   get "api/get_order_data", :to => 'api#get_order_data'
   post "api/get_order_data", :to => 'api#get_order_data'
   get "api/get_shop_settings", :to => 'api#get_shop_settings'

@@ -488,8 +488,9 @@ class ApiController < ApplicationController
     # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
     ShopifyAPI::Base.activate_session(session)
 
-    #@gift_card = ShopifyAPI::GiftCard.create()
-    @gift_card = ShopifyAPI::GiftCard.find(185757892671)
+    # @gift_card = ShopifyAPI::GiftCard.create()
+    # @gift_card = ShopifyAPI::GiftCard.find(185757892671)
+    @gift_card = ShopifyAPI::GiftCard.find(:all)
     render :json => @gift_card
 
 =begin
@@ -527,7 +528,23 @@ class ApiController < ApplicationController
     @get_shop_data = Shop.where(shopify_domain: "queuefirst.myshopify.com").first
 =end
 
-
   end
   
+  # Test another action
+  def test_one
+    shopify_shop_url = 'gozti.myshopify.com';
+    shopify_private_app_api_key = '1a6c3bfefbccc6b131ff5ed6918db3c5'
+    shopify_private_app_api_password = 'da48c1503bcf3cf829b7c0d3710d6460'
+
+    private_appshop_url = "https://#{shopify_private_app_api_key}:#{shopify_private_app_api_password}@#{shopify_shop_url}/admin"
+    ShopifyAPI::Base.site = private_appshop_url
+    ShopifyAPI::Base.api_version = '2019-04'
+
+    # ShopifyAPI::Shop.current
+    @response = ShopifyAPI::GiftCard.find(:all)
+    render :json =>  @response
+    # @gift_card = ShopifyAPI::GiftCard.find(185757892671)
+    # render :json => @gift_card
+  end
+
 end

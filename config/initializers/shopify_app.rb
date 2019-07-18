@@ -5,7 +5,7 @@ ShopifyApp.configure do |config|
   config.old_secret = "<old_secret>"
   # Consult this page for more scope options: https://help.shopify.com/en/api/getting-started/authentication/oauth/scopes
   # read_gift_cards, write_gift_cards, read_script_tags, write_script_tags
-  config.scope = "read_customers, read_products, read_orders, write_orders"
+  config.scope = "read_customers, read_products, read_orders, write_orders, read_gift_cards, write_gift_cards"
   config.embedded_app = true
   config.after_authenticate_job = false
   config.api_version = "2019-04"
