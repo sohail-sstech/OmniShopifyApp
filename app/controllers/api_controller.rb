@@ -428,8 +428,8 @@ class ApiController < ApplicationController
     elsif refund == 1
       refund_order_call = Hash.new
       refund_hash = Hash.new
-      refund_hash['order_id'] = order_data.id
       # refund_hash['restock'] = false
+      refund_hash['order_id'] = order_data.id
       refund_hash['note'] = params[:ReturnReason]
       if is_return_shipping_fee == 1
         shipping = Hash["full_refund" => true]
