@@ -91,10 +91,10 @@ class HomeController < AuthenticatedController
           # Save data to shop settings
           shop_setting = ShopSetting.find_by(shop_id: shop.id)
           if shop_setting.nil?
-            save_shop_setting = ShopSetting.create(token: params[:token])
+            save_shop_setting = ShopSetting.create(token: params[:token], private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
           else
             save_shop_setting = ShopSetting.find_by(shop_id: shop.id)
-            save_shop_setting.update(token: params[:token])
+            save_shop_setting.update(token: params[:token], private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
           end
           unless save_shop_setting.valid?
               @errors_messages = save_shop_setting.errors[:token]

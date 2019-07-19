@@ -52,6 +52,7 @@
                 <% end %>
               </div>
 
+              <% if @shop_created_reasons.count > 0 %>
               <p class="font-weight-bold font-italic text-decoration-underline">Custom Created Return Reasons By Shop Owner</p>
               <div class="form-group row">
                 <% @shop_created_reasons.each do |row| %>
@@ -68,6 +69,7 @@
                   </div>
                 <% end %>
               </div>
+              <% end %>
 
               <hr>
               <%= submit_tag("Submit", :class => "btn btn-primary") %>
