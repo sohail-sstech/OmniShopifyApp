@@ -6,7 +6,13 @@
   </script>
 <% end %>
 
+<%
+=begin
+%>
 <%= @params %>
+<%
+=end
+%>
 
 <% if (@params[:controller] == 'home') && (@params[:action] == 'index' || @params[:action] == 'submit_update_shop_settings') %>
 <% form_action =  "/home/submit_update_shop_settings" %>
@@ -28,8 +34,9 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="box-header mt-3">
-          <h4 class="box-title">Configuration</h4>
+        <div class="box-header main-title">
+          <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Home'), {:controller => 'home', :action => 'index'}, :class => "breadcrumb-back" %>
+          <h3 class="box-title">Configuration</h3>
         </div>
         <div class="box-body">
           <% unless @errors_messages.nil? %>
@@ -49,6 +56,9 @@
               <%= label_tag(:token, "Access Token", :class => "form-label", :for => "token") %>
               <%= text_field_tag(:token, shop_token, :class => "form-control") %>
             </div>
+<%
+=begin
+%>
             <div class="form-group">
               <%= label_tag(:private_app_api_key, "Private App API Key", :class => "form-label", :for => "private_app_api_key") %>
               <%= text_field_tag(:private_app_api_key, shop_private_app_api_key, :class => "form-control") %>
@@ -57,6 +67,9 @@
               <%= label_tag(:private_app_password, "Private App Password", :class => "form-label", :for => "private_app_password") %>
               <%= text_field_tag(:private_app_password, shop_private_app_password, :class => "form-control") %>
             </div>
+<%
+=end
+%>
             <hr>
             <%= submit_tag("Submit", :class => "btn btn-primary") %>
             <%= link_to 'Cancel', {:controller => 'home', :action => 'index'}, :class => "btn btn-primary" %>

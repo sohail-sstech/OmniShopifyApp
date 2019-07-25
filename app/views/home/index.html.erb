@@ -6,7 +6,13 @@
   </script>
 <% end %>
 
+<%
+=begin
+%>
 <%= @params %>
+<%
+=end
+%>
 
 <div class="box box-info">
   <div class="box-body">
@@ -18,6 +24,10 @@
             <%= flash[:notice] %>
           </div>
         <% end %>
+
+<%
+=begin
+%>
         <div class="box-header mt-3">
           <h4 class="box-title">Webhooks</h4>
         </div>
@@ -31,18 +41,55 @@
               <div class="list-group-item">This app has not created any webhooks for this Shop. Add webhooks to your ShopifyApp initializer if you need webhooks</div>
             <% end %>
           </div>
-
-          <div class="box-header mt-2">
-            <h4 class="box-title">Menu</h4>
+<%
+=end
+%>
+          <div class="box-header main-title">
+            <h3 class="box-title">Home</h3>
           </div>
+          <div class="container dsmenusptp">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-home"></i></div><a href="/"><label class="title dsactive">Home</label></a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-tag"></i></div><a href="product_exclusion_tags"><label class="title">Product Exclusion Tags</label></a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-undo"></i></div><a href="return_reasons"><label class="title">Return Reasons</label></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-gavel"></i></div><a href="rules"><label class="title">Rules</label></a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-gear"></i></div><a href="home/reconfig_shop_settings"><label class="title">Update Shop Settings</label></a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
+                <div class="dsmenucont-wrap"><i class="fa fa-asterisk"></i></div><a href="https://www.omniparcelreturns.com/bookreturn" target="_blank"><label class="title">OmniReturns</label></a>
+              </div>
+            </div>
+          </div>
+
+<%
+=begin
+%>
           <div class="list-group">
+            <a class="list-group-item" href="/">Home</a>
             <a class="list-group-item" href="product_exclusion_tags">Product Exclusion Tags</a>
             <a class="list-group-item" href="return_reasons">Return Reasons</a>
             <a class="list-group-item" href="rules">Rules</a>
             <a class="list-group-item" href="home/reconfig_shop_settings">Update Shop Settings</a>
             <a class="list-group-item" href="https://www.omniparcelreturns.com/bookreturn" target="_blank">OmniReturns</a>
           </div>
-        
+<%
+=end
+%>
+
+<%
+=begin
+%>
           <div class="box-header mt-2">
             <h4 class="box-title">Sample</h4>
           </div>
@@ -53,6 +100,9 @@
             <a class="list-group-item" href="api/get_order_data?shop=queuefirst.myshopify.com&order_no=1038" target="_blank">Sample Order Data</a>
             <a class="list-group-item" href="api/get_shop_settings?shop=queuefirst.myshopify.com" target="_blank">Sample Shop Settings Data</a>
           </div>
+<%
+=end
+%>
 
         </div>
       </div>

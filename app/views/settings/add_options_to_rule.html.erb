@@ -6,14 +6,21 @@
   </script>
 <% end %>
 
+<%
+=begin
+%>
 <%= @parmas %>
+<%
+=end
+%>
 
 <div class="box box-info">
   <div class="box-body">
     <div class="row">
       <div class="col-md-12">
-        <div class="box-header mt-3">
-          <h4 class="box-title">Add Options to Rule</h4>
+        <div class="box-header main-title">
+          <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Rules'), {:controller => 'settings', :action => 'rules'}, :class => "breadcrumb-back" %>
+          <h3 class="box-title">Add Options to Rule</h3>
         </div>
         <div class="box-body">
             <%= form_tag("/submit_add_options_to_rule/#{@parmas[:rule_id]}", method: "post") do %>

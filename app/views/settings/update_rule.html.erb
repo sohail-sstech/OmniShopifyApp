@@ -73,7 +73,13 @@
   </script>
 <% end %>
 
+<%
+=begin
+%>
 <%= @params %>
+<%
+=end
+%>
 
 <div class="box box-info">
   <div class="box-body">
@@ -81,8 +87,9 @@
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box-header mt-3">
-          <h4 class="box-title">Update Rule</h4>
+        <div class="box-header main-title">
+          <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Rules'), {:controller => 'settings', :action => 'rules'}, :class => "breadcrumb-back" %>
+          <h3 class="box-title">Update Rule</h3>
         </div>
 
         <div class="box-body">
@@ -141,8 +148,8 @@
                             <div class="form-group col-md-1">
                             <%= label_tag(:close, " ", :class => "form-label", :for => "close") %>
                             <div class="clearfix"></div>
-                            <button type="button" class="close" aria-label="Close" onclick="remove_condition(this);">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button" class="btn btn-link" aria-label="Close" onclick="remove_condition(this);">
+                              Remove
                             </button>
                             </div>
                         </div>
@@ -179,8 +186,8 @@
             <div class="form-group col-md-1">
               <%= label_tag(:close, " ", :class => "form-label", :for => "close") %>
               <div class="clearfix"></div>
-              <button type="button" class="close" aria-label="Close" onclick="remove_condition(this);">
-                <span aria-hidden="true">&times;</span>
+              <button type="button" class="btn btn-link" aria-label="Close" onclick="remove_condition(this);">
+                Remove
               </button>
             </div>
           </div>

@@ -6,10 +6,10 @@
   </script>
 <% end %>
 
-<%= @params %>
 <%
 =begin
 %>
+<%= @params %>
 <%= @display %>
 <%
 =end
@@ -21,8 +21,9 @@
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box-header mt-3">
-          <h4 class="box-title">Add Return Reasons</h4>
+        <div class="box-header main-title">
+          <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Return Reasons'), {:controller => 'settings', :action => 'return_reasons'}, :class => "breadcrumb-back" %>
+          <h3 class="box-title">Add Return Reasons</h3>
         </div>
 
         <div class="box-body">

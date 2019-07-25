@@ -6,7 +6,13 @@
   </script>
 <% end %>
 
+<%
+=begin
+%>
 <%= @params %>
+<%
+=end
+%>
 
 <div class="box box-info">
   <div class="box-body">
@@ -14,14 +20,15 @@
     <div class="row">
         <div class="col-md-12">
 
-            <div class="box-header mt-3">
-                <h4 class="box-title">Select Rule</h4>
+            <div class="box-header main-title">
+                <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Rules'), {:controller => 'settings', :action => 'rules'}, :class => "breadcrumb-back" %>
+                <h3 class="box-title">Select Rule</h3>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header select-rule-header">
                             Country
                         </div>
                         <div class="card-body">
@@ -34,7 +41,7 @@
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header select-rule-header">
                             Order Value
                         </div>
                         <div class="card-body">
@@ -51,7 +58,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header select-rule-header">
                             Order Discount
                         </div>
                         <div class="card-body">
@@ -64,7 +71,7 @@
                 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header select-rule-header">
                             Return Reason
                         </div>
                         <div class="card-body">
@@ -74,15 +81,22 @@
                         </div>
                     </div>
                 </div>
-            <div>
+            </div>
 
             <hr>
-            
+
+            <div class="row pb-3">&nbsp;</div>
+<%
+=begin
+%>
             <div class="row pb-3">
                 <div class="col-md-12">
                     <%= link_to raw('<button type="button" class="btn btn-primary">Back to Rules</button>'), {:controller => 'settings', :action => 'rules'}, :class => "" %>
                 </div>
             </div>
+<%
+=end
+%>
         </div>
     </div>
 
