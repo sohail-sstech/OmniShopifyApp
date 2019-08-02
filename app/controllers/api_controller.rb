@@ -323,7 +323,7 @@ class ApiController < ApplicationController
           order_data = ShopifyAPI::Order.find(:first, :params => {:name => shopify_order_number})
         end
         # order_data = ShopifyAPI::Order.find(:first, :params => {:name => 1002})
-        refund = 1 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 
+        refund = 3 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 3 = Rules are not set on backend
         test_app = 0
         if order_data.nil?
           refund = 0
@@ -530,11 +530,11 @@ class ApiController < ApplicationController
 
   end
   
-  # Test another action
+  # Test private app with gift card
   def test_one
-    shopify_shop_url = 'gozti.myshopify.com';
-    shopify_private_app_api_key = '1a6c3bfefbccc6b131ff5ed6918db3c5'
-    shopify_private_app_api_password = 'da48c1503bcf3cf829b7c0d3710d6460'
+    shopify_shop_url = 'loot-mart-store.myshopify.com';
+    shopify_private_app_api_key = '3c38dfedbcd441f93ced0241cd571c5a'
+    shopify_private_app_api_password = 'c88b7cea29069fc33944a20a0caf5eec'
 
     private_appshop_url = "https://#{shopify_private_app_api_key}:#{shopify_private_app_api_password}@#{shopify_shop_url}/admin"
     ShopifyAPI::Base.site = private_appshop_url
