@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   get "webhook/test", :to => 'webhook#test'
   get "webhook/uninstall_app", :to => 'webhook#uninstall_app'
   post "webhook/uninstall_app", :to => 'webhook#uninstall_app'
+  get "site", :to => 'sites#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

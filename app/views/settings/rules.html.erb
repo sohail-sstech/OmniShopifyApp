@@ -41,58 +41,62 @@
               <%= flash[:notice] %>
             </div>
           <% end %>
-          <table class="table ">
-            <% i = 1 %>
-            <% @rule_list.each do |rule| %>
-              <tr class="table-secondary rule-row">
-                <td><strong><%= i %>. <%= rule.name %></strong></td>
-                <td>Priority <%= rule.priority %></td>
-                <td>
-                  <% conditions_arr = JSON.parse(rule.conditions) %>
-                  <% j = 0 %>
-                  <% conditions_arr['cond_field'].each do |cond_field_v| %>
-                    <%= @cond_field_harr[conditions_arr['cond_field'][j]] %> <%= @cond_param_harr[conditions_arr['cond_param'][j]] %> <% if cond_field_v == 'OC'  %><%= @country_harr[conditions_arr['cond_value'][j]] %><% else %><%= conditions_arr['cond_value'][j] %><% end %><br/>
-                    <% j += 1 %>
-                  <% end %>
-                </td>
-                <td class="text-right">
-                  <%= link_to 'Edit', {:controller => 'settings', :action => 'update_rule', :id => rule.rule_id } %>&nbsp;|&nbsp;<%= link_to raw('Delete'), {:controller => 'settings', :action => 'remove_rule', :id => rule.rule_id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>
-                </td>
-              </tr>
-              <% if rule.rule_option_id.nil? %>
-                <tr>
-                  <td class="text-center" colspan="4">
-                    <%= link_to raw('<button type="button" class="btn btn-primary">Add Rule Option</button>'), {:controller => 'settings', :action => 'add_options_to_rule', :rule_id => rule.rule_id } %>
-                  </td>
-                </tr>
-              <% else %>
-                <tr>
-                  <td colspan="4"><h6 class="rule-option-title">Rule Option</h6></td>
-                </tr>
-                <tr>
+          <% if !@rule_list.nil? && @rule_list.any? %>
+            <table class="table ">
+              <% i = 1 %>
+              <% @rule_list.each do |rule| %>
+                <tr class="table-secondary rule-row">
+                  <td><strong><%= i %>. <%= rule.name %></strong></td>
+                  <td>Priority <%= rule.priority %></td>
                   <td>
-                    <% if rule.refund_method == 1 %>
-                      Refund
-                    <% else %>
-                      Store Credit
+                    <% conditions_arr = JSON.parse(rule.conditions) %>
+                    <% j = 0 %>
+                    <% conditions_arr['cond_field'].each do |cond_field_v| %>
+                      <%= @cond_field_harr[conditions_arr['cond_field'][j]] %> <%= @cond_param_harr[conditions_arr['cond_param'][j]] %> <% if cond_field_v == 'OC'  %><%= @country_harr[conditions_arr['cond_value'][j]] %><% else %><%= conditions_arr['cond_value'][j] %><% end %><br/>
+                      <% j += 1 %>
                     <% end %>
                   </td>
-                  <td>Return Days limit <%= rule.return_window %></td>
-                  <td>
-                    <% if rule.return_shipping_fee == 1 %>
-                      Shipping fee will be refunded
-                    <% else %>
-                      Shipping fee will not be refunded
-                    <% end %>                    
-                  </td>
                   <td class="text-right">
-                    <%= link_to 'Edit Option', {:controller => 'settings', :action => 'update_options_to_rule', :id => rule.rule_option_id } %>&nbsp;|&nbsp;<%= link_to 'Delete Option', {:controller => 'settings', :action => 'remove_rule_option', :id => rule.rule_option_id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>
+                    <%= link_to 'Edit', {:controller => 'settings', :action => 'update_rule', :id => rule.rule_id } %>&nbsp;|&nbsp;<%= link_to raw('Delete'), {:controller => 'settings', :action => 'remove_rule', :id => rule.rule_id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>
                   </td>
                 </tr>
+                <% if rule.rule_option_id.nil? %>
+                  <tr>
+                    <td class="text-center" colspan="4">
+                      <%= link_to raw('<button type="button" class="btn btn-primary">Add Rule Option</button>'), {:controller => 'settings', :action => 'add_options_to_rule', :rule_id => rule.rule_id } %>
+                    </td>
+                  </tr>
+                <% else %>
+                  <tr>
+                    <td colspan="4"><h6 class="rule-option-title">Rule Option</h6></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <% if rule.refund_method == 1 %>
+                        Refund
+                      <% else %>
+                        Store Credit
+                      <% end %>
+                    </td>
+                    <td>Return Days limit <%= rule.return_window %></td>
+                    <td>
+                      <% if rule.return_shipping_fee == 1 %>
+                        Shipping fee will be refunded
+                      <% else %>
+                        Shipping fee will not be refunded
+                      <% end %>                    
+                    </td>
+                    <td class="text-right">
+                      <%= link_to 'Edit Option', {:controller => 'settings', :action => 'update_options_to_rule', :id => rule.rule_option_id } %>&nbsp;|&nbsp;<%= link_to 'Delete Option', {:controller => 'settings', :action => 'remove_rule_option', :id => rule.rule_option_id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>
+                    </td>
+                  </tr>
+                <% end %>
+                <% i += 1 %>
               <% end %>
-              <% i += 1 %>
-            <% end %>
-          </table>
+            </table>
+          <% else %>
+            <h5><span class="label label-info">No rules are available.</span></h5>
+          <% end %>
         </div>
 
       </div>

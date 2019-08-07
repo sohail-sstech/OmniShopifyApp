@@ -103,7 +103,11 @@ class ApiController < ApplicationController
           shop_rules[i] = tmp_hash
           i = i + 1;
         end
-        shop_settings['shop_product_exclusion_tags'] = shop_product_exclusion_tags.tag
+        if !shop_product_exclusion_tags.nil? && !shop_product_exclusion_tags.tag.nil?
+          shop_settings['shop_product_exclusion_tags'] = shop_product_exclusion_tags.tag
+        else
+          shop_settings['shop_product_exclusion_tags'] = 'no-returns'
+        end
         shop_settings['shop_reasons'] = shop_reasons
         shop_settings['shop_rules'] = shop_rules
         shop_settings['Success'] = 1
@@ -304,7 +308,7 @@ class ApiController < ApplicationController
     
     shop_settings = Hash.new
     shop_settings = self.get_shop_settings_data(shop_url)
-
+    refund = 3 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 3 = Rules are not set on backend
     if !shop_url.nil? && !shop_url.empty? && shop_settings['Success'] != 0
       # Get shop data
       get_shop_data = Shop.where(shopify_domain: shop_url).first
@@ -323,7 +327,6 @@ class ApiController < ApplicationController
           order_data = ShopifyAPI::Order.find(:first, :params => {:name => shopify_order_number})
         end
         # order_data = ShopifyAPI::Order.find(:first, :params => {:name => 1002})
-        refund = 3 # 0 = Order data not available, 1 = Refund, 2 = Store Credit, 3 = Rules are not set on backend
         test_app = 0
         if order_data.nil?
           refund = 0
@@ -374,10 +377,13 @@ class ApiController < ApplicationController
       end
     end
 
+    # test_app = 0
     if test_app == 0
       # render :json => refund # shop_settings['shop_rules']
-      # render :plain => "test app: #{test_app}"
+      # render :json => order_data
     end
+
+
 #=begin
     # refund = 2
     # Check if we do not get shop settings
@@ -392,39 +398,74 @@ class ApiController < ApplicationController
       @response["Data"] = ""
     # Apply Gift Card to Customer
     elsif refund == 2
+      # Get shop data
+      get_shop_data = Shop.where(shopify_domain: shop_url).first
+      # Check shop data available in database
+      if !get_shop_data.nil?
+        get_shop_setting_data = ShopSetting.where(shop_id: get_shop_data['id']).first
+      end
       store_credit_call = Hash.new
-      gift_card_arr = Array.new
-      order_data.line_items.each do |line_item|
-        params[:RefundItems].each do |item|
-          if item['ShopifyOrderLineItemId'] == line_item.id
-            gift_card_hash = Hash.new
-            number = 20
-            charset = Array('A'..'Z')
-            gift_card_code = Array.new(number) { charset.sample }.join
-            gift_card_hash['code'] = gift_card_code
-            gift_card_hash['currency'] = order_data.currency
-            gift_card_hash['customer_id'] = order_data.customer.id
-            gift_card_hash['order_id'] = order_data.id    
-            gift_card_hash['line_item_id'] = line_item.id
-            line_item_amount = line_item.price_set.presentment_money.amount;
-            line_item_tax_amount = 0
-            line_item.tax_lines.each do |tax_amount|
-              line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price_set.presentment_money.amount.to_f
+      if !get_shop_setting_data.nil? && !get_shop_setting_data['private_app_api_key'].nil? && !get_shop_setting_data['private_app_password'].nil?
+        gift_card_arr = Array.new
+        order_data.line_items.each do |line_item|
+          params[:RefundItems].each do |item|
+            if item['ShopifyOrderLineItemId'] == line_item.id
+              gift_card_hash = Hash.new
+              number = 15
+              charset = Array('A'..'Z')
+              gift_card_code = Array.new(number) { charset.sample }.join
+              gift_card_hash['code'] = gift_card_code
+              gift_card_hash['currency'] = order_data.currency
+              gift_card_hash['customer_id'] = order_data.customer.id
+              # gift_card_hash['order_id'] = order_data.id    
+              # gift_card_hash['line_item_id'] = line_item.id
+              # line_item_amount = line_item.price_set.presentment_money.amount;
+              # line_item_tax_amount = 0
+              # line_item.tax_lines.each do |tax_amount|
+              #   line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price_set.presentment_money.amount.to_f
+              # end
+              # gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
+              line_item_amount = line_item.price;
+              line_item_tax_amount = 0
+              line_item.tax_lines.each do |tax_amount|
+                line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price.to_f
+              end
+              line_item_discount_amount = 0
+              line_item.discount_allocations.each do |discount_amount|
+                line_item_discount_amount = line_item_discount_amount.to_f + discount_amount.amount.to_f
+              end
+              gift_card_hash['balance'] = (line_item_amount.to_f + line_item_tax_amount.to_f - line_item_discount_amount.to_f).round(2)
+              gift_card_hash['initial_value'] = (line_item_amount.to_f + line_item_tax_amount.to_f - line_item_discount_amount.to_f).round(2)
+              gift_card_hash['note'] = "Order No: #{order_data.order_number} - #{params[:ReturnReason]}"
+              # render :json => gift_card_hash
+              shopify_shop_url = shop_url
+              shopify_private_app_api_key = get_shop_setting_data['private_app_api_key']
+              shopify_private_app_password = get_shop_setting_data['private_app_password']
+              # Call gift card api from private app
+              # store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
+              private_app_shop_domain = "#{shopify_private_app_api_key}:#{shopify_private_app_password}@#{shopify_shop_url}"
+              ShopifyAPI::Session.temp(domain: private_app_shop_domain, token: shopify_private_app_password, api_version: ShopifyApp.configuration.api_version) do
+                # @response =  ShopifyAPI::GiftCard.find(:all)
+                # render :json =>  @order
+                # Call gift card api from private app
+                # store_credit_call = gift_card_hash
+                # store_credit_call =  ShopifyAPI::GiftCard.find(:all)
+                store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
+              end
+              # render :json => store_credit_call
+              gift_card_arr.push(gift_card_hash)
             end
-            gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
-            # render :json => gift_card_hash
-            store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
-            # render :json => store_credit_call
-            gift_card_arr.push(gift_card_hash)
           end
         end
+      else
+        store_credit_call["Error"] = "Private App data not available."
       end
       @response["Success"] = 1
       @response["Type"] = 'gift_card'
       @response["Message"] = "Called Gift Card Admin API."
       @response["Data"] = store_credit_call
       # render :json => gift_card_arr
-    # Apply Refund to The Customer
+      # Apply Refund to The Customer
     elsif refund == 1
       refund_order_call = Hash.new
       refund_hash = Hash.new
@@ -532,6 +573,58 @@ class ApiController < ApplicationController
   
   # Test private app with gift card
   def test_one
+	# ShopifyAPI::Base.clear_session
+
+    shopify_shop_url = 'loot-mart-store.myshopify.com';
+    shopify_private_app_api_key = '3c38dfedbcd441f93ced0241cd571c5a'
+    shopify_private_app_api_password = 'c88b7cea29069fc33944a20a0caf5eec'
+
+=begin
+    private_appshop_url = "https://#{shopify_private_app_api_key}:#{shopify_private_app_api_password}@#{shopify_shop_url}/admin"
+    ShopifyAPI::Base.site = private_appshop_url
+	ShopifyAPI::Base.api_version = '2019-04'
+=end
+
+	  shop_url = 'loot-mart-store.myshopify.com';
+    # get shop data by shop URL
+    get_shop_data = Shop.where(shopify_domain: shop_url).first
+    # Create Shopify API session
+    session = ShopifyAPI::Session.new(domain: get_shop_data['shopify_domain'], token: get_shop_data['shopify_token'], api_version: "2019-04")
+    # session = ShopifyAPI::Session.new(domain: "queuefirst.myshopify.com", token: "4a6fdfd48b3d17639994e2f39d9bd8bd", api_version: "2019-04")
+    # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
+    ShopifyAPI::Base.activate_session(session)
+    @order = ShopifyAPI::Order.find('1328371302509')
+    
+    private_appshop_domain = "#{shopify_private_app_api_key}:#{shopify_private_app_api_password}@#{shopify_shop_url}"
+    ShopifyAPI::Session.temp(domain: private_appshop_domain, token: shopify_private_app_api_password, api_version: ShopifyApp.configuration.api_version) do
+      @response =  ShopifyAPI::GiftCard.find(:all)
+      render :json =>  @order
+    end
+    # render :json =>  @response
+    # ShopifyAPI::Shop.current
+    # @response = ShopifyAPI::GiftCard.find(:all)
+    # render :json =>  @response
+    # @gift_card = ShopifyAPI::GiftCard.find(185757892671)
+    # render :json => @gift_card
+  end
+  
+  def test_get_order(order_no)
+	shop_url = 'loot-mart-store.myshopify.com';
+    # get shop data by shop URL
+    get_shop_data = Shop.where(shopify_domain: shop_url).first
+    # Create Shopify API session
+    session = ShopifyAPI::Session.new(domain: get_shop_data['shopify_domain'], token: get_shop_data['shopify_token'], api_version: "2019-04")
+    # session = ShopifyAPI::Session.new(domain: "queuefirst.myshopify.com", token: "4a6fdfd48b3d17639994e2f39d9bd8bd", api_version: "2019-04")
+    # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
+    ShopifyAPI::Base.activate_session(session)
+	# Get all orders
+    @order = ShopifyAPI::Order.find('1328371302509')
+	# return order data
+	return @order
+  end
+  
+  # Test private app with gift card add
+  def test_two
     shopify_shop_url = 'loot-mart-store.myshopify.com';
     shopify_private_app_api_key = '3c38dfedbcd441f93ced0241cd571c5a'
     shopify_private_app_api_password = 'c88b7cea29069fc33944a20a0caf5eec'
@@ -540,11 +633,81 @@ class ApiController < ApplicationController
     ShopifyAPI::Base.site = private_appshop_url
     ShopifyAPI::Base.api_version = '2019-04'
 
-    # ShopifyAPI::Shop.current
-    @response = ShopifyAPI::GiftCard.find(:all)
-    render :json =>  @response
-    # @gift_card = ShopifyAPI::GiftCard.find(185757892671)
-    # render :json => @gift_card
+	# Get all orders
+    #order_data = ShopifyAPI::Order.find('1328371302509')
+	#render :json => order_data	
+	
+# =begin
+	order_data = ShopifyAPI::Order.find('1328371302509')
+	# order_data = test_get_order('1328371302509')
+
+	store_credit_call = Hash.new
+	store_credit_call_arr = Array.new
+	gift_card_arr = Array.new
+	order_data.line_items.each do |line_item|
+		# params[:RefundItems].each do |item|
+		  # if item['ShopifyOrderLineItemId'] == line_item.id
+			gift_card_hash = Hash.new
+			number = 18
+			charset = Array('A'..'Z')
+			gift_card_code = Array.new(number) { charset.sample }.join
+			gift_card_hash['order_id'] = order_data.id
+			gift_card_hash['line_item_id'] = line_item.id
+			gift_card_hash['customer_id'] = order_data.customer.id
+			# gift_card_hash['code'] = gift_card_code
+			gift_card_hash['currency'] = order_data.currency
+			line_item_amount = line_item.pre_tax_price;
+			line_item_tax_amount = 0
+			line_item.tax_lines.each do |tax_amount|
+			  line_item_tax_amount = line_item_tax_amount.to_f + tax_amount.price.to_f
+			end
+			gift_card_hash['balance'] = line_item_amount.to_f + line_item_tax_amount.to_f
+			gift_card_hash['initial_value'] = line_item_amount.to_f + line_item_tax_amount.to_f
+			gift_card_hash['note'] = ""
+			# gift_card_hash['api_client_id'] = '187841937517'
+			# gift_card_hash['api_client_id'] = nil
+			
+			# render :json => gift_card_hash
+			store_credit_call = ShopifyAPI::GiftCard.create(gift_card_hash)
+			render :json => store_credit_call
+			store_credit_call_arr.push(store_credit_call);
+			# render :json => store_credit_call
+			gift_card_arr.push(gift_card_hash)
+		  # end
+		# end
+	end
+	
+	# render :json => store_credit_call_arr
+
+# =end
+
+  end
+  
+  # Test get order data
+  def test_three
+	  shop_url = 'loot-mart-store.myshopify.com';
+    # get shop data by shop URL
+    get_shop_data = Shop.where(shopify_domain: shop_url).first
+    # Create Shopify API session
+    session = ShopifyAPI::Session.new(domain: get_shop_data['shopify_domain'], token: get_shop_data['shopify_token'], api_version: "2019-04")
+    # session = ShopifyAPI::Session.new(domain: "queuefirst.myshopify.com", token: "4a6fdfd48b3d17639994e2f39d9bd8bd", api_version: "2019-04")
+    # products = ShopifyAPI::Session.temp("queuefirst.myshopify.com", "4a6fdfd48b3d17639994e2f39d9bd8bd") { ShopifyAPI::Product.find(:all) }
+    ShopifyAPI::Base.activate_session(session)
+
+=begin
+	  shopify_shop_url = 'loot-mart-store.myshopify.com';
+    shopify_private_app_api_key = '3c38dfedbcd441f93ced0241cd571c5a'
+    shopify_private_app_api_password = 'c88b7cea29069fc33944a20a0caf5eec'
+
+    private_appshop_url = "https://#{shopify_private_app_api_key}:#{shopify_private_app_api_password}@#{shopify_shop_url}/admin"
+    ShopifyAPI::Base.site = private_appshop_url
+    ShopifyAPI::Base.api_version = '2019-04'
+=end
+
+	# Get all orders
+    @orders = ShopifyAPI::Order.find('1328371302509')
+    render :json => @orders	
+    # render :json => ShopifyApp.configuration.api_version
   end
 
 end

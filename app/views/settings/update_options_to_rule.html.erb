@@ -4,6 +4,17 @@
       ShopifyApp.Bar.initialize({ title: "Update Options To Rule" });
     });
   </script>
+  <script type="text/javascript">
+    function on_select_method(obj) {
+      //return_shipping_fee_blk
+      var selected_return_shipping_fee_val = $(obj).val();
+      if(selected_return_shipping_fee_val == 1) {
+        $('#return_shipping_fee_blk').show();
+      } else {
+        $('#return_shipping_fee_blk').hide();
+      }
+    }
+  </script>
 <% end %>
 
 <%
@@ -28,25 +39,28 @@
                     <% if @rule_option_data.refund_method == 1 %>
                     <% refund_method_check = true %>
                     <% store_credit_method_check = false %>
+                    <% return_shipping_fee_blk_display_style =  'style=display:block;' %>
                     <% else %>
                     <% refund_method_check = false %>
                     <% store_credit_method_check = true %>
+                    <% return_shipping_fee_blk_display_style =  'style=display:none;' %>
                     <% end %>
                     <%= label_tag(:refund_method, "Refund Method: ", :class => "form-label", :for => "method") %>
                     <div class="form-check form-check-inline">
-                        <%= radio_button_tag(:refund_method, "1", refund_method_check, :class => "form-check-input") %>&nbsp;
+                        <%= radio_button_tag(:refund_method, "1", refund_method_check, :class => "form-check-input", :onclick => "on_select_method(this)") %>&nbsp;
                         <%= label_tag(:store_credit, "Refund", :class => "form-check-label") %>
                     </div>
                     <div class="form-check form-check-inline">
-                        <%= radio_button_tag(:refund_method, "2", store_credit_method_check, :class => "form-check-input") %>&nbsp;
+                        <%= radio_button_tag(:refund_method, "2", store_credit_method_check, :class => "form-check-input", :onclick => "on_select_method(this)") %>&nbsp;
                         <%= label_tag(:refund, "Store Credit", :class => "form-check-label") %>
                     </div>
                 </div>
                 <div class="form-group">
                     <%= label_tag(:return_window, "Return Window: ", :class => "form-label", :for => "rule_name") %>
                     <%= text_field_tag(:return_window, "", :class => "form-control", :value => @rule_option_data.return_window) %>
+                    <span class="label label-primary"><i>Note: If no Return Window then you should enter 0.</i></a></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="return_shipping_fee_blk" <%= return_shipping_fee_blk_display_style %> >
                     <%= label_tag(:return_shipping_fee, "Shipping Option: ", :class => "form-label", :for => "rule_name") %>
                     <div class="form-check form-check-inline">
                         <% if @rule_option_data.return_shipping_fee == 1 %>
