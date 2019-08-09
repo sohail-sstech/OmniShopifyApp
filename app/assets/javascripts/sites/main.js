@@ -67,7 +67,7 @@
             var parallax = new Parallax(scene);
         };
     };
-    parallaxMouse();
+    //parallaxMouse();
     
     
     //===== Progress Bar
