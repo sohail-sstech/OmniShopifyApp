@@ -78,6 +78,9 @@ a.breadcrumb-back:hover {
     /*font-style: italic;*/
     text-decoration: underline;
 }
+label.form-label {
+    font-weight: bold;
+}
 /**
  * Start: Home Page Menu Design
  */
@@ -127,6 +130,10 @@ a.breadcrumb-back:hover {
 }
 .dsactive {
     color:#5c6ac4;  
+}
+.active-img-border {
+    border: 1px solid #5c6ac4 !important;
+    color: #5c6ac4;
 }
 /**
  * End: Home Page Menu Design

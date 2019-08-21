@@ -4,6 +4,16 @@
       ShopifyApp.Bar.initialize({ title: "Home" });
     });
   </script>
+  <script type="text/javascript">
+    $(function(){
+      $('.dsmenucont').mouseover(function() { console.log('mouseover');
+        $(this).find('.dsmenucont-wrap i').addClass('active-img-border');
+      });
+      $('.dsmenucont').mouseout(function() { console.log('mouseout');
+        $(this).find('.dsmenucont-wrap i').removeClass('active-img-border');
+      });
+    });
+  </script>
 <% end %>
 
 <%
@@ -15,7 +25,7 @@
 %>
 
 <div class="box box-info">
-  <div class="box-body">
+  <div class="box-body pb-3">
     <div class="row">
       <div class="col-md-12">
         
@@ -50,24 +60,24 @@
           <div class="container dsmenusptp">
             <div class="row">
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-home"></i></div><a href="/"><label class="title dsactive">Home</label></a>
+                <a href="/"><div class="dsmenucont-wrap"><i class="fa fa-home active-img-border"></i></div><label class="title dsactive">Home</label></a>
               </div>
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-tag"></i></div><a href="product_exclusion_tags"><label class="title">Product Exclusion Tags</label></a>
+                <a href="product_exclusion_tags"><div class="dsmenucont-wrap"><i class="fa fa-tag"></i></div><label class="title">Product Exclusion Tags</label></a>
               </div>
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-undo"></i></div><a href="return_reasons"><label class="title">Return Reasons</label></a>
+                <a href="return_reasons"><div class="dsmenucont-wrap"><i class="fa fa-undo"></i></div><label class="title">Return Reasons</label></a>
               </div>
             </div>
             <div class="row">
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-gavel"></i></div><a href="rules"><label class="title">Rules</label></a>
+                <a href="rules"><div class="dsmenucont-wrap"><i class="fa fa-gavel"></i></div><label class="title">Rules</label></a>
               </div>
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-gear"></i></div><a href="home/reconfig_shop_settings"><label class="title">Update Shop Settings</label></a>
+                <a href="home/reconfig_shop_settings"><div class="dsmenucont-wrap"><i class="fa fa-gear"></i></div><label class="title">Update Shop Settings</label></a>
               </div>
               <div class="col-xs-12 col-sm-6 col-lg-4 dsmenucont">
-                <div class="dsmenucont-wrap"><i class="fa fa-asterisk"></i></div><a href="https://www.omniparcelreturns.com/bookreturn" target="_blank"><label class="title">OmniReturns</label></a>
+                <a href="https://test.omniparcelreturns.com/index.php/bookreturn" target="_blank"><div class="dsmenucont-wrap"><i class="fa fa-asterisk"></i></div><label class="title">OmniReturns</label></a>
               </div>
             </div>
           </div>

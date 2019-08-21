@@ -33,7 +33,7 @@
           <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Rules'), {:controller => 'settings', :action => 'rules'}, :class => "breadcrumb-back" %>
           <h3 class="box-title">Update Options to Rule</h3>
         </div>
-        <div class="box-body">
+        <div class="box-body pb-3">
             <%= form_tag("/submit_update_options_to_rule/#{@parmas[:id]}", method: "post") do %>
                 <div class="form-group">
                     <% if @rule_option_data.refund_method == 1 %>
@@ -55,11 +55,17 @@
                         <%= label_tag(:refund, "Store Credit", :class => "form-check-label") %>
                     </div>
                 </div>
+<%
+=begin
+%>
                 <div class="form-group">
                     <%= label_tag(:return_window, "Return Window: ", :class => "form-label", :for => "rule_name") %>
                     <%= text_field_tag(:return_window, "", :class => "form-control", :value => @rule_option_data.return_window) %>
                     <span class="label label-primary"><i>Note: If no Return Window then you should enter 0.</i></a></span>
                 </div>
+<%
+=end
+%>
                 <div class="form-group" id="return_shipping_fee_blk" <%= return_shipping_fee_blk_display_style %> >
                     <%= label_tag(:return_shipping_fee, "Shipping Option: ", :class => "form-label", :for => "rule_name") %>
                     <div class="form-check form-check-inline">

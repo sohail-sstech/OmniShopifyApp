@@ -38,7 +38,7 @@
           <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Home'), {:controller => 'home', :action => 'index'}, :class => "breadcrumb-back" %>
           <h3 class="box-title">Configuration</h3>
         </div>
-        <div class="box-body">
+        <div class="box-body pb-3">
           <% unless @errors_messages.nil? %>
           <div class="alert alert-danger" role="alert">
             <% @errors_messages.each do |error| %>
@@ -55,16 +55,18 @@
             <div class="form-group">
               <%= label_tag(:token, "Access Token", :class => "form-label", :for => "token") %>
               <%= text_field_tag(:token, shop_token, :class => "form-control") %>
-              <span class="label label-primary"><i>Note: Contact <a mailto="support@omniparcel.com">support@omniparcel.com</a> to get Access Token.</i></a></span>
+              <span class="label label-primary"><i><strong>Note:</strong> Store owner should have an account on Seko Omni portal and contact <a mailto="support@omniparcelreturns.com">support@omniparcelreturns.com</a> for Access Token. After successfully submitting an Access Token App will communicate with your account on Seko Omni portal. Customer return will be processed on Seko Omni Returns portal.</i></a></span>
             </div>
             <% if form_action == "/home/submit_reconfig_shop_settings" %>
               <div class="form-group">
                 <%= label_tag(:private_app_api_key, "Private App API Key", :class => "form-label", :for => "private_app_api_key") %>
                 <%= text_field_tag(:private_app_api_key, shop_private_app_api_key, :class => "form-control") %>
+                <span class="label label-primary"><i><strong>Note:</strong> You should create Shopify Private App with gift card read/write access and provide that Private App API Key here. For Gift card access, you should have a Shopify Plus store account.</i></span>
               </div>
               <div class="form-group">
                 <%= label_tag(:private_app_password, "Private App Password", :class => "form-label", :for => "private_app_password") %>
                 <%= text_field_tag(:private_app_password, shop_private_app_password, :class => "form-control") %>
+                <span class="label label-primary"><i><strong>Note:</strong> You should create Shopify Private App with gift card read/write access and provide that Private App Password here. For Gift card access, you should have a Shopify Plus store account.</i></span>
               </div>
             <% end %>
             <hr>

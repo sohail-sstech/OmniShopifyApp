@@ -126,24 +126,32 @@
 <section id="about" class="about-area pt-125 pb-130">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <div class="section-title text-center">
                     <h2 class="title">About Me</h2>
-                    <p> Seko OmniReturns is the latest customer focused tool designed by SEKO Omni Channel Logistics to meet the needs of ecommerce consumers. The importance of a complete returns offering can never be understated.</p>
+                    <p> Seko OmniReturns app is providing an ability to interact our return portal with retailer store and get all order data from retailer store to our return portal and process the retailer return data.</p>
                 </div> <!-- section title -->
             </div>
         </div> <!-- row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="about-content mt-50">
-                    <h5 class="about-title">Why Choose Us</h5>
-                    <p>As a multi-carrier global cross-border delivery provider and a global logistics company with over 30 years’ experience in domestic and international freight, Seko Omni-Channel Logistics is well-equipped to provide retailers with an easy in-country returns solution in many key global eCommerce markets.</p>
-                    <h5 class="about-title mt-20">Customer Experience Tools</h5>
-                    <p>In the world of online retail, the customer comes first. To provide a positive customer experience, we aim to give our clients unique tools to enhance the delivery experience, strengthen your brand equity and provide opportunities for producing additional revenue. Contact us to learn more. </p>
-                    <h5 class="about-title mt-20">Management and Reporting</h5>
-                    <p>You’re only as good as your last delivery and to ensure that you’re always improving it’s critical to continuously monitor, report and adjust your delivery and returns solutions to best provide the required services and solutions to your customers. Let us be your expert logistics partner to ensure that you’re always in front of the curve. </p>
-                    <h5 class="about-title mt-20">Flexible System Integration</h5>
-                    <p>The world of eCommerce moves too fast to let a system integration be an obstacle to obtaining a better delivery solution. Our OmniParcel platforms are built with maximum flexibility in-mind so you can quickly and easily take advantage of the multitude of delivery solutions on offer. </p>
+                <div class="about-content mt-40">
+                    <h5 class="about-title">Fetures of Seko Omnireturns</h5>
+                    <div class="col-md-12">
+                        <ul class="feature-list">
+                            <li>The App will have an ability to interact with OmniRPS and OmniReturns to send all return data from Shopify store.</li>
+                            <li>OmniReturns to pull order information with images, so that the customer can choose which item they would like to return</li>
+                            <li>The App will be able to deal with multiple Shopify Stores for the same customer.</li>
+                            <li>Shopify store owner can set rules by his own for return product from their store.</li>
+                            <li>Shopify store owner can also exclude products from returnable products by using product exclusion tags using nonreturnable tag.</li>
+                            <li>Map the App with OmniReturns (To generate return label) and OmniRPS portal (To process the returned items)</li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <h5 class="about-title mt-20">How does the Seko Omnireturns will work?</h5>
+                    <p>Seko Omnireturns will integrate with mechant's shopify store/shopify plus store (To use Gift card issuance feature) to add seamless return experience. Using Seko Omnireturns mechant will be able to send each order details to OmniReturns and OmniRPS which is used to generate return labels and processing the returned items. Seko Omnireturns will give you choice of sending refund/gift card on different events like First carrier scan event, return processing event or at the time of changing the status of each item in OmniRPS. Seko Omnireturns will ease your pain to handle each returns manually and automate the refund process for all your returns.</p>
+                    <h5 class="about-title mt-20">How do I get started with Seko Omnireturns</h5>
+                    <p>Just install this app and you need to contact Omnisupport at support@omniparcelreturns.com to configure your account in OmniRPS and OmniReturns Portal and you are ready to use this auto refund solutions for all your returns.</p>
 <%
 =begin
 %>
@@ -293,8 +301,8 @@
                         <i class="lni-arrow-right-circle"></i>
                     </div>
                     <div class="service-content">
-                        <h4 class="service-title"><a href="#">Send order data to Seko</a></h4>
-                        <p>Automatically send order data to the Seko Omni via Webhook. Customer will use those data to create Return on Seko Omni portal.</p>
+                        <h4 class="service-title"><a href="javascript:void(0);">Send order data to Seko</a></h4>
+                        <p>Automatically send order data to the Seko Omni via Webhook. Customer will use those data to create Return on Seko Omni return portal.</p>
                     </div>
                 </div> <!-- single service -->
             </div>
@@ -304,8 +312,8 @@
                         <i class="lni-ban"></i>
                     </div>
                     <div class="service-content">
-                        <h4 class="service-title"><a href="#">Make Unreturnable Product</a></h4>
-                        <p>Assign some nonreturnable tags to product due to this those product will not display on Seko Omni Portal.</p>
+                        <h4 class="service-title"><a href="javascript:void(0);">Add Unreturnable Tag</a></h4>
+                        <p>Assign some nonreturnable tags to products (For e.g Cosmetic items). Nonreturnable items will not be shown while creating return label.</p>
                     </div>
                 </div> <!-- single service -->
             </div>
@@ -315,8 +323,8 @@
                         <i class="lni-money-protection"></i>
                     </div>
                     <div class="service-content">
-                        <h4 class="service-title"><a href="#">Issue Refund/Gift Card</a></h4>
-                        <p>Merchant can set rules to issue Refund/Gift(Store credit) Card to the customer.</p>
+                        <h4 class="service-title"><a href="javascript:void(0);">Issue Refund/Gift Card</a></h4>
+                        <p>Merchant can set rules to issue Refund/Gift Card to the customer on events like carrier scan, processing and return management.</p>
                     </div>
                 </div> <!-- single service -->
             </div>
@@ -434,37 +442,17 @@
                                 </div>
                             </div>
                         </div>
-<%
-=begin
-%>
                         <div class="card">
                             <div class="card-header p-2" id="headingTwo">
                                 <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    How to get Seko OmniReturns App access token?
-                                </button>
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        When refund/store credit(gift card) send to the customer?
+                                    </button>
                                 </h5>
                             </div>
                             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#faqExample">
                                 <div class="card-body">
-                                    You should send mail to the support@omniparcelreturns.com to get Seko OmniReturns App access token.
-                                </div>
-                            </div>
-                        </div>
-<%
-=end
-%>
-                        <div class="card">
-                            <div class="card-header p-2" id="headingThree">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        When refund/gift card send to the customer?
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqExample">
-                                <div class="card-body">
-                                    When will return process at our returns portal, at that time we will issue refund/store credit.
+                                    When the return process occurs at our returns portal, at that time we will issue refund/store credit.
                                 </div>
                             </div>
                         </div>
@@ -472,13 +460,13 @@
                             <div class="card-header p-2" id="headingThree">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        When I have issue how can I contact you?
+                                        How can I contact you?
                                     </button>
                                     </h5>
                             </div>
                             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#faqExample">
                                 <div class="card-body">
-                                    You can directly mail to us on support@omniparcelreturns.com.
+                                    You can contact us via direct mail on support@omniparcelreturns.com.
                                 </div>
                             </div>
                         </div>

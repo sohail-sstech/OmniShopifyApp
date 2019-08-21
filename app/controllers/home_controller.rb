@@ -9,11 +9,14 @@ class HomeController < AuthenticatedController
     current_shop_domain = ShopifyAPI::Shop.current.domain
     shop = Shop.find_by(shopify_domain: current_shop_domain)
     shop_settings = ShopSetting.find_by(shop_id: shop.id)
+    @webhooks = ShopifyAPI::Webhook.find(:all)
+=begin
     unless shop_settings.nil?
       @webhooks = ShopifyAPI::Webhook.find(:all)
     else
       render "update_shop_settings.html.erb"
     end
+=end
   end
 
   # Submit update shop settings
@@ -91,11 +94,37 @@ class HomeController < AuthenticatedController
           # Save data to shop settings
           shop_setting = ShopSetting.find_by(shop_id: shop.id)
           if shop_setting.nil?
-            save_shop_setting = ShopSetting.create(token: params[:token], private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
+            # order create webhook
+            order_create_wh = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "#{@@omnirps_create_order_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
+            order_create_wh.save
+            order_create_wh_id = order_create_wh.id
+            # uninstall app webhook
+            uninstall_app_wh = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "#{@@shopify_uninstall_app_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
+            uninstall_app_wh.save
+            uninstall_app_wh_id = uninstall_app_wh.id
+            # save shop settings data
+            save_shop_setting = ShopSetting.create(token: params[:token], create_order_webhook_id: order_create_wh_id, uninstall_app_webhook_id: uninstall_app_wh_id, private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
             # save_shop_setting = ShopSetting.create(token: params[:token])
           else
+            # order create webhook
+            if shop_setting.create_order_webhook_id.nil?
+              order_create_wh = ShopifyAPI::Webhook.new({:topic => "orders/create", :address => "#{@@omnirps_create_order_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
+              order_create_wh.save
+              order_create_wh_id = order_create_wh.id
+            else
+              order_create_wh_id = shop_setting.create_order_webhook_id
+            end
+            # uninstall app webhook
+            if shop_setting.uninstall_app_webhook_id.nil?
+              uninstall_app_wh = ShopifyAPI::Webhook.new({:topic => "app/uninstalled", :address => "#{@@shopify_uninstall_app_webhook_url}?shop=#{current_shop_domain}", :format => "json"})
+              uninstall_app_wh.save
+              uninstall_app_wh_id = uninstall_app_wh.id
+            else
+              uninstall_app_wh_id = shop_setting.uninstall_app_webhook_id
+            end
+            # update shop setting
             save_shop_setting = ShopSetting.find_by(shop_id: shop.id)
-            save_shop_setting.update(token: params[:token], private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
+            save_shop_setting.update(token: params[:token], create_order_webhook_id: order_create_wh_id, uninstall_app_webhook_id: uninstall_app_wh_id, private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
             # save_shop_setting.update(token: params[:token])
           end
           unless save_shop_setting.valid?

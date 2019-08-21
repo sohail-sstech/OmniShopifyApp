@@ -1,5 +1,5 @@
 ShopifyApp.configure do |config|
-  config.application_name = "Omni Return App"
+  config.application_name = "Seko OmniReturns"
   config.api_key = "0deac70618ffaca41aac840bd1303b23"
   config.secret = "3a5bc5c00ef055726a059c0a0e077396"
   config.old_secret = "<old_secret>"

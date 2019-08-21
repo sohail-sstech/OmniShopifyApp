@@ -1762,3 +1762,10 @@ p.form-message.success, p.form-message.error {
 .btn-link:hover {
 	color: #007698;
 }
+.feature-list {
+  list-style-type:disc;
+}
+.feature-list li {
+  width:98% !important;
+  margin-left: 2%;
+}

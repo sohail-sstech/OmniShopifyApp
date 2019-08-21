@@ -31,8 +31,9 @@
         <div class="box-header main-title">
           <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Home'), {:controller => 'home', :action => 'index'}, :class => "breadcrumb-back" %>
           <h3 class="box-title">Rules</h3>
+          <span class="label label-primary"><i>You can create rules by using Country, Order Value, Order Discount, and Return Reasons. After creating Rule, you can assign return options like Refund/Store Credit(Gift Card).</i></span>
+          <div class="clearfix mt-2"></div>
           <%= link_to raw('<button type="button" class="btn btn-primary">Create a new rule</button>'), {:controller => 'settings', :action => 'select_rule'}, :class => "" %>
-          
         </div>
 
         <div class="box-body mt-3 pb-3">
@@ -78,13 +79,21 @@
                         Store Credit
                       <% end %>
                     </td>
-                    <td>Return Days limit <%= rule.return_window %></td>
+                    <td>&nbsp;
+<%
+=begin
+%>
+                    Return Days limit <%= rule.return_window %>
+<%
+=end
+%>
+                    </td>
                     <td>
-                      <% if rule.return_shipping_fee == 1 %>
+                      <% if rule.refund_method == 1 && rule.return_shipping_fee == 1 %>
                         Shipping fee will be refunded
                       <% else %>
                         Shipping fee will not be refunded
-                      <% end %>                    
+                      <% end %>
                     </td>
                     <td class="text-right">
                       <%= link_to 'Edit Option', {:controller => 'settings', :action => 'update_options_to_rule', :id => rule.rule_option_id } %>&nbsp;|&nbsp;<%= link_to 'Delete Option', {:controller => 'settings', :action => 'remove_rule_option', :id => rule.rule_option_id }, method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %>

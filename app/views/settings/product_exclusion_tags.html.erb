@@ -26,7 +26,7 @@
           <h3 class="box-title">Product Exclusion Tags</h3>
         </div>
         
-        <div class="box-body">
+        <div class="box-body pb-3">
           <% unless @errors_messages.nil? %>
           <div class="alert alert-danger" role="alert">
             <% @errors_messages.each do |error| %>
@@ -44,6 +44,7 @@
             <div class="form-group">
               <%= label_tag(:exclusion_tags, "Exclusion Tags(Comma separated tags)", :class => "form-label", :for => "exclusion_tags") %>
               <%= text_field_tag(:exclusion_tags, @no_tags, :class => "form-control" ) %>
+              <span class="label label-primary"><i><strong>Note:</strong> You can pass tags from above comma-separated tag list in Shopify product tags for not returnable products. Those products will not be displayed on Seko Omni Returns portal.</i></span>
             </div>
             <hr>
             <%= submit_tag("Submit", :class => "btn btn-primary") %>

@@ -34,9 +34,10 @@
         <div class="box-header main-title">
           <%= link_to raw('<i class="fa fa-angle-left"></i>&nbsp;Home'), {:controller => 'home', :action => 'index'}, :class => "breadcrumb-back" %>
           <h3 class="box-title">Return Reasons</h3>
+          <span class="label label-primary"><i>Below are default return reasons. You can add your reasons also. You can create return rules by using the below-selected reasons.</i></span>
         </div>
 
-        <div class="box-body">
+        <div class="box-body pb-3">
           <% if flash[:notice] %>
             <div class="alert alert-success" role="alert">
               <%= flash[:notice] %>
