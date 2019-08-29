@@ -13,6 +13,13 @@
         $(this).find('.dsmenucont-wrap i').removeClass('active-img-border');
       });
     });
+
+    //For pagination
+    $('#will_paginate_id').bind('click', function(event){
+      window.scrollTo(0,0);
+      // Some code to show loader on screen
+      $('#loading').html('<div class="ui active dimmer"><div class="ui large text loader">Loading</div></div>');
+    });
   </script>
 <% end %>
 
@@ -116,10 +123,71 @@
 
         </div>
       </div>
+
+      <div class="row mt-2 pb-3">
+      <% unless @refund_details.empty? %>
+        <h4>Order Details</h4>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Order No</th>
+              <th scope="col">Product SKU</th>
+              <th scope="col">Gift Card</th>
+              <th scope="col">Refund Type</th>
+              <th scope="col">Refund Status</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @refund_details.each do |refund_detail| %>
+            <tr>
+              <th scope="row">
+                <% if !refund_detail.sp_order_id.nil? %>
+                  <a href="https://<%= @current_shop_domain %>/admin/orders/<%= refund_detail.sp_order_id %>" target="_blank"><%= refund_detail.sp_order_no  %></a>
+                <% else %>
+                  <%= refund_detail.sp_order_no  %>
+                <% end %>
+              </th>
+              <td>
+                <% if !refund_detail.sp_order_id.nil? %>
+                  <a href="https://<%= @current_shop_domain %>/admin/products/<%= refund_detail.sp_product_id %>" target="_blank"><%= refund_detail.sp_product_sku  %></a>
+                <% else %>
+                  <%= refund_detail.sp_product_sku  %>
+                <% end %>
+              </td>
+              <td>
+                <% if !refund_detail.sp_gift_card_id.nil? %>
+                  <a href="https://<%= @current_shop_domain %>/admin/gift_cards/<%= refund_detail.sp_gift_card_id %>" target="_blank">View</a>
+                <% else %>
+                  Not available
+                <% end %>
+              </td>
+              <td>
+                <% if refund_detail.refund_type == 2 %>
+                  Store Credit
+                <% else %>
+                  Refund
+                <% end %>                
+              </td>
+              <td>
+                <% if refund_detail.refund_status == 1 %>
+                  Success
+                <% else %>
+                  Failure
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        <table>
+        <div id='will_paginate_id'>
+            <%= will_paginate @refund_details %>
+        </div>
+      <% end %>
     </div>
 
-  </div>
 
+    </div>   
+  </div>
 </div>
 
 <%

@@ -1,0 +1,2 @@
+class RefundDetailApiLog < ApplicationRecord
+end

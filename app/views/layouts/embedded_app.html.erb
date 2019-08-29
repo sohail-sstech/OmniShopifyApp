@@ -7,7 +7,7 @@
     <title><%= application_name %></title>
     <%= stylesheet_link_tag 'app/application' %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <%= javascript_include_tag 'app/application', "data-turbolinks-track" => true %>
+    
     <%= csrf_meta_tags %>
   </head>
 
@@ -37,5 +37,6 @@
         <%= yield :javascript %>
       </div>
     <% end %>
+	<%= javascript_include_tag 'app/application', "data-turbolinks-track" => true %>
   </body>
 </html>

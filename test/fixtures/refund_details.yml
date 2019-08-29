@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shop_id: 1
+  customer_id: 1
+  sp_order_id: 1
+  sp_product_id: 1
+  sp_order_no: MyString
+  sp_product_sku: MyString
+  refund_type: 1
+  refund_status: 1
+  status_message: MyText
+
+two:
+  shop_id: 1
+  customer_id: 1
+  sp_order_id: 1
+  sp_product_id: 1
+  sp_order_no: MyString
+  sp_product_sku: MyString
+  refund_type: 1
+  refund_status: 1
+  status_message: MyText

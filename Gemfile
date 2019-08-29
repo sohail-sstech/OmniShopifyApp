@@ -61,3 +61,6 @@ gem 'shopify_app'
 
 # Httparty (0.17.0)
 gem 'httparty'
+
+# Pagination Library
+gem 'will_paginate'

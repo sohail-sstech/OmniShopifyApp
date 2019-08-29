@@ -1,5 +1,7 @@
 # class SettingsController < ApplicationController
 class SettingsController < AuthenticatedController
+    # disable the CSRF protection
+    skip_before_action :verify_authenticity_token
 
     # Product exclusion tags action
     def product_exclusion_tags

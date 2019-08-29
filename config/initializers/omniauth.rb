@@ -14,7 +14,8 @@ provider :shopify,
     else
       ''
     end
-
+	
+	# strategy.options[:callback_url] = "https://1cbfc401.ngrok.io/auth/shopify/callback"
     strategy.options[:client_options][:site] = shop
     strategy.options[:old_client_secret] = ShopifyApp.configuration.old_secret
   }

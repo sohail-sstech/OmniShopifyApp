@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_112805) do
+ActiveRecord::Schema.define(version: 2019_08_27_120258) do
 
   create_table "countries", force: :cascade do |t|
     t.string "iso", limit: 2
@@ -36,6 +36,39 @@ ActiveRecord::Schema.define(version: 2019_07_19_112805) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "shop_id"
+  end
+
+  create_table "refund_detail_api_logs", force: :cascade do |t|
+    t.integer "shop_id"
+    t.integer "refund_detail_id", limit: 20, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "refund_request"
+    t.text "refund_response"
+    t.integer "refund_type", limit: 2
+    t.integer "refund_status", limit: 2, default: 0
+    t.text "refund_error"
+    t.index ["shop_id"], name: "index_refund_detail_api_logs_on_shop_id"
+  end
+
+  create_table "refund_details", force: :cascade do |t|
+    t.integer "shop_id"
+    t.integer "sp_customer_id", limit: 20, null: false
+    t.integer "sp_order_id", limit: 20, null: false
+    t.integer "sp_product_id", limit: 20, null: false
+    t.string "sp_order_no", limit: 255
+    t.string "sp_product_sku", limit: 255
+    t.string "sp_gift_card_code", limit: 255
+    t.integer "refund_type", limit: 2, null: false
+    t.integer "refund_status", limit: 2, default: 0, null: false
+    t.text "status_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "sp_order_line_item_id"
+    t.float "gift_card_amount"
+    t.integer "sp_refund_id"
+    t.integer "sp_gift_card_id"
+    t.index ["shop_id"], name: "index_refund_details_on_shop_id"
   end
 
   create_table "rule_options", force: :cascade do |t|

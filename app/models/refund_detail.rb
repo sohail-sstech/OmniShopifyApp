@@ -1,0 +1,2 @@
+class RefundDetail < ApplicationRecord
+end

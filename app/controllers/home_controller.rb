@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class HomeController < AuthenticatedController
+  # disable the CSRF protection
+  skip_before_action :verify_authenticity_token
 
   # Index action
   def index
@@ -10,6 +12,11 @@ class HomeController < AuthenticatedController
     shop = Shop.find_by(shopify_domain: current_shop_domain)
     shop_settings = ShopSetting.find_by(shop_id: shop.id)
     @webhooks = ShopifyAPI::Webhook.find(:all)
+    
+    # added some condition for where clause
+    # @users = User.where('age > ?', 18).paginate(:page => params[:page], :per_page => 5)
+    @current_shop_domain = current_shop_domain;
+    @refund_details = RefundDetail.where('shop_id', shop.id).order('id DESC').paginate(:page => params[:page], :per_page => 5)
 =begin
     unless shop_settings.nil?
       @webhooks = ShopifyAPI::Webhook.find(:all)
@@ -103,7 +110,7 @@ class HomeController < AuthenticatedController
             uninstall_app_wh.save
             uninstall_app_wh_id = uninstall_app_wh.id
             # save shop settings data
-            save_shop_setting = ShopSetting.create(token: params[:token], create_order_webhook_id: order_create_wh_id, uninstall_app_webhook_id: uninstall_app_wh_id, private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
+            save_shop_setting = ShopSetting.create(shop_id: shop.id, token: params[:token], create_order_webhook_id: order_create_wh_id, uninstall_app_webhook_id: uninstall_app_wh_id, private_app_api_key: params[:private_app_api_key], private_app_password: params[:private_app_password])
             # save_shop_setting = ShopSetting.create(token: params[:token])
           else
             # order create webhook
